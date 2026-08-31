@@ -1,4 +1,3 @@
-```python
 from flask import Flask, request, jsonify, send_from_directory
 import os
 import json
@@ -1388,4 +1387,3 @@ if __name__ == "__main__":
         debug=True
 
     )
-```
