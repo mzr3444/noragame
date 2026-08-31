@@ -1,25 +1,24 @@
-### `index.html`
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nora — Living Character</title>
+
+<title>Nora — Living World</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    background: #101016;
+    height: 100vh;
+    background: #0d0d14;
     color: #eee;
     font-family: Arial, sans-serif;
-    height: 100vh;
-    overflow: hidden;
 }
 
 .game {
@@ -27,11 +26,13 @@ body {
     height: 100vh;
 }
 
-/* CHARACTER SIDE */
+/* =========================
+   LEFT CHARACTER PANEL
+========================= */
 
 .character {
-    width: 330px;
-    background: linear-gradient(180deg, #191923, #111117);
+    width: 300px;
+    background: #15151f;
     border-right: 1px solid #292936;
     padding: 25px;
     display: flex;
@@ -39,26 +40,38 @@ body {
 }
 
 .avatar {
-    width: 150px;
-    height: 150px;
-    margin: 20px auto;
+    width: 140px;
+    height: 140px;
+    margin: 15px auto 20px;
+
     border-radius: 50%;
+
     background:
-        radial-gradient(circle at 35% 35%, #ffd6c8 0 12%, transparent 13%),
-        linear-gradient(135deg, #68445e, #29283e);
-    box-shadow: 0 0 45px rgba(160,100,180,.25);
+        radial-gradient(
+            circle at 50% 35%,
+            #f3c7bd 0 25%,
+            transparent 26%
+        ),
+        linear-gradient(
+            135deg,
+            #754c6d,
+            #292941
+        );
+
+    box-shadow:
+        0 0 40px rgba(150,100,180,.25);
 }
 
 .name {
     text-align: center;
     font-size: 30px;
-    margin: 5px;
 }
 
 .status {
     text-align: center;
-    color: #a9a9b7;
-    font-size: 14px;
+    color: #999;
+    font-size: 13px;
+    margin-top: 5px;
 }
 
 .stats {
@@ -70,45 +83,56 @@ body {
 }
 
 .stat-name {
-    font-size: 13px;
-    color: #aaa;
+    font-size: 12px;
+    color: #999;
     margin-bottom: 6px;
 }
 
 .bar {
-    width: 100%;
     height: 7px;
-    background: #292934;
+    background: #292936;
     border-radius: 10px;
     overflow: hidden;
 }
 
 .fill {
     height: 100%;
-    border-radius: 10px;
     transition: width .5s;
 }
 
 .trust {
-    background: #8b70d6;
+    background: #8870d5;
 }
 
 .friendship {
-    background: #d86d9a;
+    background: #d46c9c;
 }
 
 .mood {
-    background: #6d9bd8;
+    background: #6798d5;
 }
 
-.info {
+.reset {
     margin-top: auto;
-    color: #777;
-    font-size: 12px;
-    line-height: 1.5;
+    padding: 12px;
+
+    border: 1px solid #393944;
+    border-radius: 8px;
+
+    background: #20202b;
+    color: #aaa;
+
+    cursor: pointer;
 }
 
-/* CHAT */
+.reset:hover {
+    background: #2b2b38;
+    color: white;
+}
+
+/* =========================
+   CHAT
+========================= */
 
 .chat {
     flex: 1;
@@ -117,13 +141,16 @@ body {
 }
 
 .header {
-    padding: 20px 25px;
-    border-bottom: 1px solid #292936;
-    background: #15151d;
+    padding: 18px 25px;
+
+    border-bottom:
+        1px solid #292936;
+
+    background: #13131b;
 }
 
 .header-title {
-    font-size: 19px;
+    font-size: 18px;
 }
 
 .header-sub {
@@ -135,65 +162,102 @@ body {
 .messages {
     flex: 1;
     overflow-y: auto;
-    padding: 30px;
+
+    padding: 35px;
 }
 
 .message {
-    max-width: 750px;
-    margin-bottom: 22px;
-    animation: appear .25s ease;
+    max-width: 800px;
+    margin-bottom: 25px;
+
+    animation:
+        appear .25s ease;
 }
 
 @keyframes appear {
+
     from {
         opacity: 0;
-        transform: translateY(7px);
+        transform:
+            translateY(8px);
     }
+
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform:
+            translateY(0);
     }
 }
 
 .nora-name {
-    color: #c38bd6;
-    font-size: 13px;
+    color: #c28bd5;
+    font-size: 12px;
     margin-bottom: 5px;
 }
 
 .player-name {
-    color: #719bd7;
-    font-size: 13px;
+    color: #719bdd;
+    font-size: 12px;
     margin-bottom: 5px;
 }
 
 .bubble {
-    line-height: 1.6;
+    line-height: 1.7;
     font-size: 15px;
 }
 
 .action {
-    color: #888;
+    color: #777;
     font-style: italic;
-    margin-bottom: 7px;
+    margin: 5px 0;
 }
 
+/* =========================
+   TYPING
+========================= */
+
+.typing {
+    display: none;
+
+    padding:
+        0 35px 10px;
+
+    color: #777;
+    font-style: italic;
+}
+
+/* =========================
+   INPUT
+========================= */
+
 .input-area {
-    padding: 20px;
-    border-top: 1px solid #292936;
-    background: #15151d;
     display: flex;
     gap: 10px;
+
+    padding: 18px;
+
+    background: #15151f;
+
+    border-top:
+        1px solid #292936;
 }
 
 input {
     flex: 1;
+
+    padding: 14px;
+
     background: #22222d;
+
+    border:
+        1px solid #363642;
+
+    border-radius: 9px;
+
     color: white;
-    border: 1px solid #363642;
-    border-radius: 10px;
-    padding: 15px;
+
     outline: none;
+
     font-size: 15px;
 }
 
@@ -202,360 +266,582 @@ input:focus {
 }
 
 button {
+    padding:
+        0 22px;
+
     border: none;
+
+    border-radius: 9px;
+
     background: #7656a8;
+
     color: white;
-    padding: 0 22px;
-    border-radius: 10px;
+
     cursor: pointer;
-    font-size: 14px;
 }
 
 button:hover {
     background: #8967bd;
 }
 
-.typing {
-    color: #777;
-    font-style: italic;
-    margin-bottom: 15px;
-    display: none;
-}
 </style>
 </head>
 
+
 <body>
+
 
 <div class="game">
 
-    <aside class="character">
 
-        <div class="avatar"></div>
+<!-- =========================
+     CHARACTER
+========================= -->
 
-        <div class="name">Nora</div>
+<aside class="character">
 
-        <div class="status" id="status">
-            Sitting quietly...
-        </div>
+    <div class="avatar"></div>
 
-        <div class="stats">
+    <div class="name">
+        Nora
+    </div>
 
-            <div class="stat">
-                <div class="stat-name">Trust</div>
-                <div class="bar">
-                    <div class="fill trust" id="trust"></div>
-                </div>
+    <div class="status" id="status">
+        Home alone...
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-name">
+                Trust
             </div>
 
-            <div class="stat">
-                <div class="stat-name">Friendship</div>
-                <div class="bar">
-                    <div class="fill friendship" id="friendship"></div>
-                </div>
-            </div>
+            <div class="bar">
 
-            <div class="stat">
-                <div class="stat-name">Mood</div>
-                <div class="bar">
-                    <div class="fill mood" id="mood"></div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="info">
-            Nora is quiet and observant.<br><br>
-            She likes music, drawing, astronomy,
-            rain and late-night conversations.
-        </div>
-
-    </aside>
-
-
-    <main class="chat">
-
-        <header class="header">
-            <div class="header-title">Nora's Room</div>
-            <div class="header-sub">
-                The world continues even when you're quiet.
-            </div>
-        </header>
-
-        <section class="messages" id="messages">
-
-            <div class="message">
-
-                <div class="nora-name">NORA</div>
-
-                <div class="action">
-                    *Nora glances toward the window.*
-                </div>
-
-                <div class="bubble">
-                    Oh... hey.
-                </div>
-
-                <div class="action">
-                    *She gives a small smile.*
-                </div>
-
-                <div class="bubble">
-                    I wasn't really doing anything.
-                    Just sitting here.
+                <div
+                    class="fill trust"
+                    id="trust">
                 </div>
 
             </div>
 
-        </section>
-
-        <div class="typing" id="typing">
-            Nora is thinking...
         </div>
 
-        <div class="input-area">
 
-            <input
-                id="input"
-                placeholder="Talk to Nora..."
-                autocomplete="off"
-            >
+        <div class="stat">
 
-            <button onclick="sendMessage()">
-                Send
-            </button>
+            <div class="stat-name">
+                Friendship
+            </div>
+
+            <div class="bar">
+
+                <div
+                    class="fill friendship"
+                    id="friendship">
+                </div>
+
+            </div>
 
         </div>
 
-    </main>
+
+        <div class="stat">
+
+            <div class="stat-name">
+                Mood
+            </div>
+
+            <div class="bar">
+
+                <div
+                    class="fill mood"
+                    id="mood">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="reset"
+        onclick="resetGame()">
+
+        ↻ Reset Game
+
+    </button>
+
+</aside>
+
+
+
+<!-- =========================
+     CHAT
+========================= -->
+
+<main class="chat">
+
+
+<header class="header">
+
+    <div class="header-title">
+        Nora's Neighborhood
+    </div>
+
+    <div class="header-sub">
+        Somewhere on a quiet street...
+    </div>
+
+</header>
+
+
+
+<section
+    class="messages"
+    id="messages">
+
+
+<!-- OPENING SCENE -->
+
+<div class="message">
+
+    <div class="action">
+        *It's getting dark outside.*
+    </div>
+
+    <div class="action">
+        *You're standing on a quiet neighborhood
+        street. Most of the houses have their
+        lights on.*
+    </div>
+
+    <div class="action">
+        *You stop in front of one house.*
+    </div>
+
+    <div class="action">
+        *After a moment of hesitation,
+        you knock on the door.*
+    </div>
+
+    <div class="action">
+        *Knock. Knock.*
+    </div>
+
+    <br>
+
+    <div class="action">
+        *A few seconds pass.*
+    </div>
+
+    <div class="action">
+        *You hear footsteps approaching.*
+    </div>
+
+    <div class="action">
+        *The door opens slightly.*
+    </div>
+
+    <br>
+
+    <div class="nora-name">
+        NORA
+    </div>
+
+    <div class="bubble">
+        "...Hi?"
+    </div>
+
+    <div class="action">
+        *A girl looks at you from behind
+        the partially opened door.*
+    </div>
+
+    <div class="bubble">
+        "Can I... help you?"
+    </div>
 
 </div>
 
 
+</section>
+
+
+
+<div
+    class="typing"
+    id="typing">
+
+    Nora is thinking...
+
+</div>
+
+
+
+<div class="input-area">
+
+    <input
+        id="input"
+        autocomplete="off"
+        placeholder="What do you say?"
+    >
+
+    <button onclick="sendMessage()">
+        Send
+    </button>
+
+</div>
+
+
+</main>
+
+</div>
+
+
+
 <script>
 
-const state = {
+/* =========================
+   GAME STATE
+========================= */
 
-    trust: 20,
-    friendship: 10,
-    mood: 45,
+const DEFAULT_STATE = {
+
+    trust: 5,
+
+    friendship: 0,
+
+    mood: 40,
 
     memories: [],
 
-    conversation: [],
+    conversation: []
 
-    nora: {
-        name: "Nora",
-
-        personality: [
-            "quiet",
-            "observant",
-            "kind",
-            "awkward",
-            "curious",
-            "intelligent",
-            "lonely"
-        ],
-
-        interests: [
-            "drawing",
-            "music",
-            "astronomy",
-            "rain",
-            "late night conversations"
-        ],
-
-        fears: [
-            "being forgotten",
-            "being replaced",
-            "being abandoned"
-        ],
-
-        goals: [
-            "find someone she genuinely connects with",
-            "become more comfortable opening up",
-            "feel less alone"
-        ]
-    }
 };
 
 
-/* UPDATE UI */
-
-function updateStats() {
-
-    document.getElementById("trust").style.width =
-        state.trust + "%";
-
-    document.getElementById("friendship").style.width =
-        state.friendship + "%";
-
-    document.getElementById("mood").style.width =
-        state.mood + "%";
+let state =
+    JSON.parse(
+        localStorage.getItem("noraGame")
+    )
+    ||
+    structuredClone(DEFAULT_STATE);
 
 
-    let status = "";
+/* =========================
+   SAVE
+========================= */
 
-    if (state.mood < 25)
-        status = "Feeling very lonely...";
+function saveGame() {
 
-    else if (state.mood < 45)
-        status = "A little down...";
+    localStorage.setItem(
+        "noraGame",
+        JSON.stringify(state)
+    );
 
-    else if (state.mood < 70)
-        status = "Quietly thinking...";
-
-    else
-        status = "Feeling happier.";
-
-    document.getElementById("status").innerText = status;
 }
 
 
-/* ADD MESSAGE */
+/* =========================
+   RESET
+========================= */
 
-function addMessage(sender, text, action = "") {
+function resetGame() {
+
+    const confirmReset =
+        confirm(
+            "Reset Nora's story?\n\n" +
+            "This will erase the conversation, " +
+            "memories, trust, friendship, and mood."
+        );
+
+    if (!confirmReset) {
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "noraGame"
+    );
+
+
+    state =
+        structuredClone(
+            DEFAULT_STATE
+        );
+
+
+    location.reload();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats() {
+
+    document.getElementById(
+        "trust"
+    ).style.width =
+        state.trust + "%";
+
+
+    document.getElementById(
+        "friendship"
+    ).style.width =
+        state.friendship + "%";
+
+
+    document.getElementById(
+        "mood"
+    ).style.width =
+        state.mood + "%";
+
+
+    let status;
+
+
+    if (state.mood < 20) {
+
+        status =
+            "Feeling very lonely...";
+
+    }
+
+    else if (state.mood < 40) {
+
+        status =
+            "Feeling a little down...";
+
+    }
+
+    else if (state.mood < 70) {
+
+        status =
+            "Quietly thinking...";
+
+    }
+
+    else {
+
+        status =
+            "Feeling happier.";
+
+    }
+
+
+    document.getElementById(
+        "status"
+    ).innerText = status;
+
+}
+
+
+/* =========================
+   ADD MESSAGE
+========================= */
+
+function addMessage(
+    sender,
+    text,
+    action = ""
+) {
 
     const container =
-        document.getElementById("messages");
+        document.getElementById(
+            "messages"
+        );
+
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    div.className = "message";
+
+    div.className =
+        "message";
+
 
     if (sender === "Nora") {
 
         div.innerHTML = `
-            <div class="nora-name">NORA</div>
 
-            ${action ?
-                `<div class="action">${escapeHTML(action)}</div>`
-                : ""}
+            <div class="nora-name">
+                NORA
+            </div>
+
+            ${
+                action
+                ?
+                `<div class="action">
+                    ${escapeHTML(action)}
+                </div>`
+                :
+                ""
+            }
 
             <div class="bubble">
                 ${escapeHTML(text)}
             </div>
+
         `;
 
-    } else {
+    }
+
+    else {
 
         div.innerHTML = `
-            <div class="player-name">YOU</div>
+
+            <div class="player-name">
+                YOU
+            </div>
 
             <div class="bubble">
                 ${escapeHTML(text)}
             </div>
+
         `;
+
     }
+
 
     container.appendChild(div);
 
+
     container.scrollTop =
         container.scrollHeight;
+
 }
 
 
-/* BASIC MEMORY */
-
-function remember(text) {
-
-    state.memories.push(text);
-
-    // Keep the most important recent memories
-    if (state.memories.length > 30) {
-        state.memories.shift();
-    }
-
-    localStorage.setItem(
-        "noraMemories",
-        JSON.stringify(state.memories)
-    );
-}
-
-
-/* LOAD MEMORY */
-
-function loadMemory() {
-
-    const saved =
-        localStorage.getItem("noraMemories");
-
-    if (saved) {
-        state.memories =
-            JSON.parse(saved);
-    }
-}
-
-
-/* SEND */
+/* =========================
+   SEND MESSAGE
+========================= */
 
 async function sendMessage() {
 
     const input =
-        document.getElementById("input");
+        document.getElementById(
+            "input"
+        );
+
 
     const text =
         input.value.trim();
 
-    if (!text) return;
+
+    if (!text) {
+        return;
+    }
+
 
     input.value = "";
 
-    addMessage("You", text);
+
+    addMessage(
+        "You",
+        text
+    );
+
 
     state.conversation.push({
+
         role: "user",
+
         content: text
+
     });
 
-    remember(text);
 
-    analyzeMessage(text);
+    state.memories.push(
+        text
+    );
+
+
+    if (
+        state.memories.length > 30
+    ) {
+
+        state.memories.shift();
+
+    }
+
+
+    analyzeMessage(
+        text
+    );
+
+
+    saveGame();
 
     updateStats();
 
-    document.getElementById("typing").style.display =
+
+    document.getElementById(
+        "typing"
+    ).style.display =
         "block";
+
 
     try {
 
         const response =
-            await fetch("/chat", {
+            await fetch(
+                "/chat",
+                {
 
-                method: "POST",
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
+                    body: JSON.stringify({
 
-                    message: text,
+                        message: text,
 
-                    memories:
-                        state.memories,
+                        memories:
+                            state.memories,
 
-                    conversation:
-                        state.conversation,
+                        conversation:
+                            state.conversation,
 
-                    personality:
-                        state.nora,
+                        relationship: {
 
-                    relationship: {
-                        trust: state.trust,
-                        friendship: state.friendship,
-                        mood: state.mood
-                    }
+                            trust:
+                                state.trust,
 
-                })
-            });
+                            friendship:
+                                state.friendship,
+
+                            mood:
+                                state.mood
+
+                        }
+
+                    })
+
+                }
+            );
 
 
         const data =
             await response.json();
 
-        document.getElementById("typing").style.display =
+
+        document.getElementById(
+            "typing"
+        ).style.display =
             "none";
 
 
@@ -567,81 +853,118 @@ async function sendMessage() {
                 data.action || ""
             );
 
+
             state.conversation.push({
+
                 role: "assistant",
-                content: data.reply
+
+                content:
+                    data.reply
+
             });
 
-        } else {
 
-            fallbackResponse(text);
+            saveGame();
+
         }
 
-    } catch (error) {
+        else {
 
-        document.getElementById("typing").style.display =
+            fallbackResponse(
+                text
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        document.getElementById(
+            "typing"
+        ).style.display =
             "none";
 
-        fallbackResponse(text);
+
+        fallbackResponse(
+            text
+        );
+
     }
+
 }
 
 
-/* SIMPLE FALLBACK */
+/* =========================
+   FALLBACK
+========================= */
 
 function fallbackResponse(text) {
 
     const lower =
         text.toLowerCase();
 
+
     let reply =
-        "I don't really know what to say... but I'm glad you're here.";
+        "I'm not really sure what to say...";
+
 
     let action =
-        "*Nora looks down for a moment.*";
+        "*Nora watches you quietly.*";
 
 
     if (
+        lower.includes("hi") ||
         lower.includes("hello") ||
         lower.includes("hey")
     ) {
 
         reply =
-            "Hey... I was wondering if you'd come back.";
+            "Hey... I wasn't expecting anyone.";
 
         action =
-            "*Nora smiles slightly.*";
+            "*Nora opens the door a little more.*";
 
-        state.mood += 5;
-        state.friendship += 2;
-    }
-
-
-    else if (
-        lower.includes("lonely") ||
-        lower.includes("alone")
-    ) {
-
-        reply =
-            "Yeah... I know that feeling.";
-
-        action =
-            "*She looks toward the window.*";
-
-        state.mood -= 2;
         state.trust += 2;
+
+        state.friendship += 2;
+
+        state.mood += 3;
+
     }
 
 
     else if (
-        lower.includes("music")
+        lower.includes("sorry") ||
+        lower.includes("bother")
     ) {
 
         reply =
-            "I listen to music when I can't sleep. Sometimes it makes the room feel less empty.";
+            "You're not bothering me.";
 
         action =
-            "*Nora quietly taps her fingers against the desk.*";
+            "*She gives a small shake of her head.*";
+
+        state.trust += 2;
+
+    }
+
+
+    else if (
+        lower.includes("alone") ||
+        lower.includes("lonely")
+    ) {
+
+        reply =
+            "Yeah... I guess I am."
+
+            + " Most days I don't really notice it.";
+
+        action =
+            "*Nora looks down at the porch.*";
+
+        state.trust += 3;
+
     }
 
 
@@ -651,46 +974,76 @@ function fallbackResponse(text) {
     ) {
 
         reply =
-            "I draw sometimes. Mostly things I can't really explain.";
+            "You like drawing too? "
+            + "I don't usually show people "
+            + "what I make.";
 
         action =
-            "*She closes her notebook halfway.*";
+            "*She glances toward a sketchbook "
+            + "sitting on a nearby table.*";
 
         state.trust += 2;
+
     }
 
 
     else if (
-        lower.includes("like you") ||
-        lower.includes("care about you")
+        lower.includes("music")
     ) {
 
         reply =
-            "You... actually mean that?";
+            "I listen to music when the house "
+            + "gets too quiet.";
 
         action =
-            "*Nora looks genuinely surprised.*";
+            "*She looks back into the house.*";
 
-        state.trust += 5;
-        state.friendship += 5;
-        state.mood += 7;
+    }
+
+
+    else if (
+        lower.includes("friend")
+    ) {
+
+        reply =
+            "Friend...?"
+
+            + " I haven't heard someone say "
+            + "that to me in a while.";
+
+        action =
+            "*Nora looks surprised for a moment.*";
+
+        state.friendship += 4;
+
+        state.trust += 3;
+
+        state.mood += 5;
+
     }
 
 
     else {
 
-        state.friendship += 1;
-
-        if (state.friendship > 40) {
-
-            reply =
-                "That's interesting... tell me more.";
-
-        } else {
+        if (
+            state.friendship > 30
+        ) {
 
             reply =
-                "Hmm... I haven't really thought about that before.";
+                "That's interesting. "
+                + "I actually want to hear "
+                + "more about that.";
+
         }
+
+        else {
+
+            reply =
+                "Hmm... I haven't really "
+                + "thought about that before.";
+
+        }
+
     }
 
 
@@ -703,10 +1056,25 @@ function fallbackResponse(text) {
         reply,
         action
     );
+
+
+    state.conversation.push({
+
+        role: "assistant",
+
+        content: reply
+
+    });
+
+
+    saveGame();
+
 }
 
 
-/* UNDERSTAND PLAYER */
+/* =========================
+   MESSAGE ANALYSIS
+========================= */
 
 function analyzeMessage(text) {
 
@@ -715,96 +1083,158 @@ function analyzeMessage(text) {
 
 
     const positive = [
+
         "thanks",
         "thank you",
-        "love",
         "like",
+        "love",
         "care",
         "friend",
         "help",
         "happy",
-        "good"
+        "good",
+        "nice"
+
     ];
 
+
     const negative = [
+
         "hate",
         "leave",
         "ignore",
         "stupid",
         "annoying"
+
     ];
 
 
-    positive.forEach(word => {
+    positive.forEach(
+        word => {
 
-        if (lower.includes(word)) {
+            if (
+                lower.includes(word)
+            ) {
 
-            state.trust += 1;
-            state.friendship += 1;
-            state.mood += 1;
+                state.trust += 1;
+
+                state.friendship += 1;
+
+                state.mood += 1;
+
+            }
+
         }
+    );
 
-    });
 
+    negative.forEach(
+        word => {
 
-    negative.forEach(word => {
+            if (
+                lower.includes(word)
+            ) {
 
-        if (lower.includes(word)) {
+                state.trust -= 2;
 
-            state.trust -= 2;
-            state.friendship -= 2;
-            state.mood -= 3;
+                state.friendship -= 2;
+
+                state.mood -= 3;
+
+            }
+
         }
-
-    });
+    );
 
 
     clampStats();
+
 }
 
 
-/* LIMIT STATS */
+/* =========================
+   LIMIT VALUES
+========================= */
 
 function clampStats() {
 
     state.trust =
-        Math.max(0, Math.min(100, state.trust));
+        Math.max(
+            0,
+            Math.min(
+                100,
+                state.trust
+            )
+        );
+
 
     state.friendship =
-        Math.max(0, Math.min(100, state.friendship));
+        Math.max(
+            0,
+            Math.min(
+                100,
+                state.friendship
+            )
+        );
+
 
     state.mood =
-        Math.max(0, Math.min(100, state.mood));
+        Math.max(
+            0,
+            Math.min(
+                100,
+                state.mood
+            )
+        );
+
 }
 
 
-/* SECURITY */
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHTML(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    div.textContent = text;
+    div.textContent =
+        text;
 
     return div.innerHTML;
+
 }
 
 
-/* ENTER KEY */
+/* =========================
+   ENTER KEY
+========================= */
 
 document
     .getElementById("input")
-    .addEventListener("keydown", event => {
+    .addEventListener(
+        "keydown",
+        event => {
 
-        if (event.key === "Enter") {
-            sendMessage();
+            if (
+                event.key === "Enter"
+            ) {
+
+                sendMessage();
+
+            }
+
         }
+    );
 
-    });
 
+/* =========================
+   START
+========================= */
 
-loadMemory();
 updateStats();
 
 </script>
@@ -812,5 +1242,3 @@ updateStats();
 </body>
 </html>
 ```
-
- 
