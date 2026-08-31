@@ -4,9 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Nora — Living World</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -14,8 +16,8 @@
 body {
     margin: 0;
     height: 100vh;
-    background: #0d0d14;
-    color: #eee;
+    background: #0b0b12;
+    color: #eeeeF2;
     font-family: Arial, sans-serif;
 }
 
@@ -38,9 +40,10 @@ body {
 }
 
 .avatar {
-    width: 140px;
-    height: 140px;
+    width: 145px;
+    height: 145px;
     margin: 15px auto 20px;
+
     border-radius: 50%;
 
     background:
@@ -56,7 +59,7 @@ body {
         );
 
     box-shadow:
-        0 0 40px rgba(150,100,180,.25);
+        0 0 45px rgba(150,100,180,.25);
 }
 
 .name {
@@ -113,10 +116,6 @@ body {
     background: #77b8d8;
 }
 
-/* =========================
-   RESET BUTTON
-========================= */
-
 .reset {
     margin-top: auto;
     padding: 12px;
@@ -147,7 +146,9 @@ body {
 
 .header {
     padding: 18px 25px;
+
     border-bottom: 1px solid #292936;
+
     background: #13131b;
 }
 
@@ -168,56 +169,63 @@ body {
 }
 
 .message {
-    max-width: 800px;
-    margin-bottom: 25px;
-    animation: appear .25s ease;
+    max-width: 850px;
+    margin-bottom: 30px;
+
+    animation:
+        appear .25s ease;
 }
 
 @keyframes appear {
+
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform:
+            translateY(8px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform:
+            translateY(0);
     }
+
 }
 
 .nora-name {
     color: #c28bd5;
     font-size: 12px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .player-name {
     color: #719bdd;
     font-size: 12px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .bubble {
-    line-height: 1.7;
+    line-height: 1.8;
     font-size: 15px;
+    white-space: pre-wrap;
 }
 
 .action {
     color: #777;
     font-style: italic;
-    margin: 5px 0;
+    margin: 7px 0;
 }
 
 .typing {
     display: none;
-    padding: 0 35px 10px;
+
+    padding:
+        0 35px 10px;
+
     color: #777;
+
     font-style: italic;
 }
-
-/* =========================
-   INPUT
-========================= */
 
 .input-area {
     display: flex;
@@ -227,7 +235,8 @@ body {
 
     background: #15151f;
 
-    border-top: 1px solid #292936;
+    border-top:
+        1px solid #292936;
 }
 
 input {
@@ -237,7 +246,8 @@ input {
 
     background: #22222d;
 
-    border: 1px solid #363642;
+    border:
+        1px solid #363642;
 
     border-radius: 9px;
 
@@ -253,7 +263,8 @@ input:focus {
 }
 
 button {
-    padding: 0 22px;
+    padding:
+        0 22px;
 
     border: none;
 
@@ -269,13 +280,16 @@ button {
 button:hover {
     background: #8967bd;
 }
+
 </style>
 </head>
 
 
 <body>
 
+
 <div class="game">
+
 
 <!-- =========================
      CHARACTER
@@ -289,12 +303,17 @@ button:hover {
         Nora
     </div>
 
-    <div class="status" id="status">
+    <div
+        class="status"
+        id="status">
+
         Home alone...
+
     </div>
 
 
     <div class="stats">
+
 
         <div class="stat">
 
@@ -332,8 +351,6 @@ button:hover {
         </div>
 
 
-        <!-- LOVE TOWARD PLAYER -->
-
         <div class="stat">
 
             <div class="stat-name">
@@ -369,6 +386,7 @@ button:hover {
 
         </div>
 
+
     </div>
 
 
@@ -381,6 +399,7 @@ button:hover {
     </button>
 
 </aside>
+
 
 
 <!-- =========================
@@ -403,6 +422,7 @@ button:hover {
 </header>
 
 
+
 <section
     class="messages"
     id="messages">
@@ -420,24 +440,23 @@ button:hover {
 
     <div class="action">
         *You're standing on a quiet
-        neighborhood street.*
+        neighborhood street. The air
+        is cool, and the sound of
+        distant cars occasionally
+        passes through the silence.*
     </div>
 
     <div class="action">
-        *Most of the houses have
-        their lights on.*
+        *You stop in front of a house
+        with only one light on.*
     </div>
 
     <div class="action">
-        *You stop in front of one house.*
+        *You hesitate.*
     </div>
 
     <div class="action">
-        *You hesitate for a moment.*
-    </div>
-
-    <div class="action">
-        *Then you knock on the door.*
+        *Then you knock.*
     </div>
 
     <div class="action">
@@ -447,11 +466,16 @@ button:hover {
     <br>
 
     <div class="action">
-        *A few seconds pass.*
+        *Nothing happens for several
+        seconds.*
     </div>
 
     <div class="action">
-        *You hear footsteps approaching.*
+        *Then you hear footsteps.*
+    </div>
+
+    <div class="action">
+        *The lock clicks.*
     </div>
 
     <div class="action">
@@ -469,8 +493,9 @@ button:hover {
     </div>
 
     <div class="action">
-        *A girl looks at you from behind
-        the partially opened door.*
+        *A girl peers through the
+        opening. She looks surprised
+        to see someone standing there.*
     </div>
 
     <div class="bubble">
@@ -479,7 +504,9 @@ button:hover {
 
 </div>
 
+
 </section>
+
 
 
 <div
@@ -489,6 +516,7 @@ button:hover {
     Nora is thinking...
 
 </div>
+
 
 
 <div class="input-area">
@@ -511,18 +539,14 @@ button:hover {
 </div>
 
 
+
 <script>
 
-/* =========================
-   DEFAULT GAME STATE
-========================= */
+/* =========================================================
+   GAME STATE
+========================================================= */
 
 const DEFAULT_STATE = {
-
-    /*
-       These values describe
-       Nora's feelings toward YOU.
-    */
 
     trust: 5,
 
@@ -549,9 +573,9 @@ let state =
     : structuredClone(DEFAULT_STATE);
 
 
-/* =========================
-   SAVE GAME
-========================= */
+/* =========================================================
+   SAVE
+========================================================= */
 
 function saveGame() {
 
@@ -563,23 +587,18 @@ function saveGame() {
 }
 
 
-/* =========================
-   RESET EVERYTHING
-========================= */
+/* =========================================================
+   RESET
+========================================================= */
 
 function resetGame() {
 
     const confirmed =
         confirm(
             "Reset Nora's entire story?\n\n" +
-            "This will erase:\n" +
-            "• Conversation\n" +
-            "• Memories\n" +
-            "• Trust\n" +
-            "• Friendship\n" +
-            "• Love\n" +
-            "• Mood\n\n" +
-            "The story will start again."
+            "This will erase her memories, " +
+            "conversation, trust, friendship, " +
+            "love, and mood."
         );
 
 
@@ -593,20 +612,14 @@ function resetGame() {
     );
 
 
-    state =
-        structuredClone(
-            DEFAULT_STATE
-        );
-
-
     location.reload();
 
 }
 
 
-/* =========================
-   UPDATE STAT BARS
-========================= */
+/* =========================================================
+   UPDATE STATS
+========================================================= */
 
 function updateStats() {
 
@@ -621,16 +634,6 @@ function updateStats() {
     ).style.width =
         state.friendship + "%";
 
-
-    /*
-       IMPORTANT:
-
-       Love is Nora's romantic
-       feelings toward the player.
-
-       Nora does NOT try to fill
-       this bar herself.
-    */
 
     document.getElementById(
         "love"
@@ -647,31 +650,38 @@ function updateStats() {
     let status;
 
 
-    if (state.mood < 20) {
+    if (state.mood < 15) {
 
         status =
             "Feeling very lonely...";
 
     }
 
-    else if (state.mood < 40) {
+    else if (state.mood < 35) {
 
         status =
-            "Feeling a little down...";
+            "A little down...";
 
     }
 
-    else if (state.mood < 70) {
+    else if (state.mood < 60) {
 
         status =
             "Quietly thinking...";
 
     }
 
+    else if (state.mood < 80) {
+
+        status =
+            "Feeling pretty good.";
+
+    }
+
     else {
 
         status =
-            "Feeling happier.";
+            "In a really good mood.";
 
     }
 
@@ -684,9 +694,9 @@ function updateStats() {
 }
 
 
-/* =========================
+/* =========================================================
    ADD MESSAGE
-========================= */
+========================================================= */
 
 function addMessage(
     sender,
@@ -762,9 +772,9 @@ function addMessage(
 }
 
 
-/* =========================
+/* =========================================================
    SEND MESSAGE
-========================= */
+========================================================= */
 
 async function sendMessage() {
 
@@ -801,18 +811,11 @@ async function sendMessage() {
     });
 
 
-    /*
-       Store what the player said.
-
-       These memories belong to
-       Nora's relationship with YOU.
-    */
-
     state.memories.push(text);
 
 
     if (
-        state.memories.length > 50
+        state.memories.length > 60
     ) {
 
         state.memories.shift();
@@ -834,268 +837,350 @@ async function sendMessage() {
         "block";
 
 
-    try {
+    /*
+       Give Nora a small thinking delay.
 
-        const response =
-            await fetch(
-                "/chat",
-                {
+       This makes her feel less like
+       an instant-response chatbot.
+    */
 
-                    method: "POST",
+    const thinkingTime =
+        Math.min(
+            2200,
+            Math.max(
+                700,
+                text.length * 18
+            )
+        );
 
-                    headers: {
 
-                        "Content-Type":
-                            "application/json"
+    setTimeout(
+        async () => {
 
-                    },
+            try {
 
-                    body: JSON.stringify({
+                const response =
+                    await fetch(
+                        "/chat",
+                        {
 
-                        message: text,
+                            method: "POST",
 
-                        memories:
-                            state.memories,
+                            headers: {
 
-                        conversation:
-                            state.conversation,
+                                "Content-Type":
+                                    "application/json"
 
-                        relationship: {
+                            },
 
-                            trust:
-                                state.trust,
+                            body:
+                                JSON.stringify({
 
-                            friendship:
-                                state.friendship,
+                                    message: text,
 
-                            love:
-                                state.love,
+                                    memories:
+                                        state.memories,
 
-                            mood:
-                                state.mood
+                                    conversation:
+                                        state.conversation,
+
+                                    relationship: {
+
+                                        trust:
+                                            state.trust,
+
+                                        friendship:
+                                            state.friendship,
+
+                                        love:
+                                            state.love,
+
+                                        mood:
+                                            state.mood
+
+                                    }
+
+                                })
 
                         }
+                    );
 
-                    })
+
+                const data =
+                    await response.json();
+
+
+                document.getElementById(
+                    "typing"
+                ).style.display =
+                    "none";
+
+
+                if (
+                    data.reply &&
+                    data.reply.trim()
+                ) {
+
+                    addMessage(
+                        "Nora",
+                        data.reply,
+                        data.action || ""
+                    );
+
+
+                    state.conversation.push({
+
+                        role: "assistant",
+
+                        content:
+                            data.reply
+
+                    });
+
+
+                    saveGame();
 
                 }
-            );
+
+                else {
+
+                    fallbackResponse(text);
+
+                }
+
+            }
+
+            catch (error) {
+
+                document.getElementById(
+                    "typing"
+                ).style.display =
+                    "none";
 
 
-        const data =
-            await response.json();
+                fallbackResponse(text);
 
+            }
 
-        document.getElementById(
-            "typing"
-        ).style.display =
-            "none";
-
-
-        if (data.reply) {
-
-            addMessage(
-                "Nora",
-                data.reply,
-                data.action || ""
-            );
-
-
-            state.conversation.push({
-
-                role: "assistant",
-
-                content:
-                    data.reply
-
-            });
-
-
-            saveGame();
-
-        }
-
-        else {
-
-            fallbackResponse(text);
-
-        }
-
-    }
-
-    catch (error) {
-
-        document.getElementById(
-            "typing"
-        ).style.display =
-            "none";
-
-
-        fallbackResponse(text);
-
-    }
+        },
+        thinkingTime
+    );
 
 }
 
 
-/* =========================
-   FALLBACK RESPONSES
-========================= */
+/* =========================================================
+   CONTEXTUAL FALLBACK
+========================================================= */
 
 function fallbackResponse(text) {
 
     const lower =
-        text.toLowerCase();
+        text.toLowerCase().trim();
 
 
-    let reply =
-        "I'm not really sure what to say...";
+    let reply = "";
+
+    let action = "";
 
 
-    let action =
-        "*Nora watches you quietly.*";
-
-
-    /* GREETING */
+    /*
+       NAME / INTRODUCTION
+    */
 
     if (
-        lower.includes("hi") ||
-        lower.includes("hello") ||
-        lower.includes("hey")
+        lower.includes("my name is")
     ) {
 
+        const name =
+            text
+                .split(/my name is/i)[1]
+                ?.trim();
+
+
         reply =
-            "Hey... I wasn't expecting anyone.";
+            "Oh... so you're " +
+            (name || "you") +
+            "." +
+            "\n\n" +
+            "I don't know why, but I feel like " +
+            "it's been a while since someone " +
+            "actually introduced themselves to me " +
+            "instead of just asking what they want.";
 
         action =
-            "*Nora opens the door a little more.*";
+            "*Nora's expression softens a little.*";
 
-        state.trust += 2;
+        state.trust += 3;
         state.friendship += 2;
-        state.mood += 3;
+    }
+
+
+    /*
+       ASKING WHO SHE IS
+    */
+
+    else if (
+        lower.includes("who are you") ||
+        lower.includes("what's your name") ||
+        lower.includes("what is your name")
+    ) {
+
+        reply =
+            "I'm Nora." +
+            "\n\n" +
+            "I know that's probably the most " +
+            "obvious answer ever, but... I don't " +
+            "really get many people showing up at " +
+            "my door asking who I am.";
+
+        action =
+            "*She gives a small, slightly embarrassed smile.*";
 
     }
 
 
-    /* KINDNESS */
+    /*
+       WHY ARE YOU HERE
+    */
 
     else if (
-        lower.includes("sorry") ||
-        lower.includes("bother")
+        lower.includes("why are you") ||
+        lower.includes("why did you")
     ) {
 
         reply =
-            "You're not bothering me.";
+            "That's a good question." +
+            "\n\n" +
+            "Honestly, I'm not completely sure. " +
+            "I guess I've gotten used to keeping " +
+            "things to myself. It's easier sometimes. " +
+            "You don't have to explain yourself to " +
+            "anyone when you're alone.";
 
         action =
-            "*She gives a small shake of her head.*";
+            "*Nora pauses before looking back at you.*";
 
         state.trust += 2;
 
     }
 
 
-    /* LONELINESS */
+    /*
+       LONELY / ALONE
+    */
 
     else if (
+        lower.includes("lonely") ||
         lower.includes("alone") ||
-        lower.includes("lonely")
+        lower.includes("no friends")
     ) {
 
         reply =
-            "Yeah... I guess I am. " +
-            "Most days I don't really notice it.";
+            "Yeah..." +
+            "\n\n" +
+            "I am." +
+            "\n\n" +
+            "I don't really like admitting it, though. " +
+            "There's something embarrassing about " +
+            "saying you're lonely when there are " +
+            "literally houses all around you.";
 
         action =
-            "*Nora looks down at the porch.*";
+            "*Nora looks down at the porch for a moment.*";
 
-        state.trust += 3;
+        state.trust += 4;
+        state.mood -= 2;
 
     }
 
 
-    /* DRAWING */
+    /*
+       KINDNESS
+    */
 
     else if (
-        lower.includes("drawing") ||
-        lower.includes("draw")
+        lower.includes("are you okay") ||
+        lower.includes("you okay") ||
+        lower.includes("how are you")
     ) {
 
         reply =
-            "You like drawing too? " +
-            "I don't usually show people " +
-            "what I make.";
+            "I'm okay." +
+            "\n\n" +
+            "*She hesitates.*" +
+            "\n\n" +
+            "Actually... that's probably not true. " +
+            "I've just gotten really good at saying " +
+            "I'm okay when I don't want people to " +
+            "ask questions.";
 
         action =
-            "*She glances toward a sketchbook " +
-            "sitting on a nearby table.*";
+            "*Nora gives a small shrug.*";
+
+        state.trust += 5;
+        state.mood += 2;
+
+    }
+
+
+    /*
+       MUSIC
+    */
+
+    else if (
+        lower.includes("music") ||
+        lower.includes("song")
+    ) {
+
+        reply =
+            "Music is kind of my escape." +
+            "\n\n" +
+            "I'll put my headphones on and just " +
+            "sit there for an hour sometimes. " +
+            "It's weird how a song can make you feel " +
+            "like someone understands you even though " +
+            "they have absolutely no idea who you are.";
+
+        action =
+            "*Nora glances toward a pair of headphones on her desk.*";
+
+        state.friendship += 2;
+
+    }
+
+
+    /*
+       DRAWING
+    */
+
+    else if (
+        lower.includes("draw") ||
+        lower.includes("drawing") ||
+        lower.includes("art")
+    ) {
+
+        reply =
+            "I draw when I don't know how to say " +
+            "something." +
+            "\n\n" +
+            "Sometimes it's people. Sometimes it's " +
+            "places I've never actually been. " +
+            "Sometimes I just scribble until the page " +
+            "is completely covered.";
+
+        action =
+            "*Nora glances toward a sketchbook inside the house.*";
 
         state.trust += 2;
-
-    }
-
-
-    /* MUSIC */
-
-    else if (
-        lower.includes("music")
-    ) {
-
-        reply =
-            "I listen to music when the house " +
-            "gets too quiet.";
-
-        action =
-            "*She looks back into the house.*";
-
-    }
-
-
-    /* FRIENDSHIP */
-
-    else if (
-        lower.includes("friend")
-    ) {
-
-        reply =
-            "Friend...?"
-
-            + " I haven't heard someone say "
-            + "that to me in a while.";
-
-        action =
-            "*Nora looks surprised for a moment.*";
-
-        state.friendship += 4;
-        state.trust += 3;
-        state.mood += 5;
-
-    }
-
-
-    /* AFFECTION */
-
-    else if (
-        lower.includes("care about you") ||
-        lower.includes("i care")
-    ) {
-
-        reply =
-            "You... actually care about me?";
-
-        action =
-            "*Nora looks at you for a moment, "
-            + "clearly caught off guard.*";
-
-        state.trust += 3;
         state.friendship += 2;
-        state.love += 1;
-        state.mood += 4;
 
     }
 
 
-    /* ROMANTIC COMPLIMENT */
+    /*
+       COMPLIMENT
+    */
 
     else if (
         lower.includes("pretty") ||
@@ -1103,91 +1188,344 @@ function fallbackResponse(text) {
         lower.includes("cute")
     ) {
 
-        reply =
-            "Oh..."
-
-            + " You really think that?";
-
-        action =
-            "*Nora looks away, slightly embarrassed.*";
-
-        state.love += 2;
-        state.trust += 1;
-        state.mood += 3;
-
-    }
-
-
-    /* MISS YOU */
-
-    else if (
-        lower.includes("miss you")
-    ) {
-
-        reply =
-            "You... missed me?";
-
-        action =
-            "*A small smile appears on Nora's face.*";
-
-        state.love += 3;
-        state.friendship += 2;
-        state.mood += 5;
-
-    }
-
-
-    /* LOVE CONFESSION */
-
-    else if (
-        lower.includes("i love you") ||
-        lower.includes("love you")
-    ) {
-
-        /*
-           The player saying this does NOT
-           automatically make Nora love them.
-
-           It only gives her a small emotional
-           reaction. Her Love level develops
-           over time.
-        */
-
-        reply =
-            "I... don't know what to say to that.";
-
-        action =
-            "*Nora looks down, visibly flustered.*";
-
-        state.trust += 2;
-        state.mood += 4;
-        state.love += 2;
-
-    }
-
-
-    /* GENERAL */
-
-    else {
-
         if (
-            state.friendship > 40
+            state.love < 20
         ) {
 
             reply =
-                "That's interesting. " +
-                "I actually want to hear " +
-                "more about that.";
+                "Oh..." +
+                "\n\n" +
+                "You really think that?" +
+                "\n\n" +
+                "That's... not something I hear very often.";
+
+            action =
+                "*Nora looks away, suddenly interested in the floor.*";
 
         }
 
         else {
 
             reply =
-                "Hmm... I haven't really " +
-                "thought about that before.";
+                "You're seriously going to keep " +
+                "saying things like that, aren't you?" +
+                "\n\n" +
+                "*She tries not to smile.*" +
+                "\n\n" +
+                "It's working, by the way.";
+
+            action =
+                "*Nora hides a small smile.*";
 
         }
+
+
+        state.love += 2;
+        state.mood += 4;
+        state.trust += 1;
+
+    }
+
+
+    /*
+       PLAYER CARES
+    */
+
+    else if (
+        lower.includes("i care about you") ||
+        lower.includes("care about you") ||
+        lower.includes("i care")
+    ) {
+
+        reply =
+            "You barely know me." +
+            "\n\n" +
+            "*Nora goes quiet for a few seconds.*" +
+            "\n\n" +
+            "So why does hearing you say that " +
+            "actually make me feel better?";
+
+        action =
+            "*Her voice becomes quieter.*";
+
+        state.trust += 5;
+        state.friendship += 4;
+        state.love += 1;
+        state.mood += 5;
+
+    }
+
+
+    /*
+       LOVE CONFESSION
+    */
+
+    else if (
+        lower.includes("i love you") ||
+        lower.includes("love you")
+    ) {
+
+        if (
+            state.love < 20
+        ) {
+
+            reply =
+                "I..." +
+                "\n\n" +
+                "That's a really big thing to say " +
+                "to someone you just met." +
+                "\n\n" +
+                "I don't think I can honestly say " +
+                "the same thing yet. But..." +
+                "\n\n" +
+                "I'm not going to pretend hearing it " +
+                "doesn't mean something to me.";
+
+            action =
+                "*Nora looks surprised and a little flustered.*";
+
+            state.love += 1;
+
+        }
+
+        else if (
+            state.love < 60
+        ) {
+
+            reply =
+                "You know..." +
+                "\n\n" +
+                "I used to think you were just being " +
+                "nice to me." +
+                "\n\n" +
+                "But lately, when I see you show up, " +
+                "I actually get excited. I don't know " +
+                "when that started happening.";
+
+            action =
+                "*Nora smiles nervously.*";
+
+            state.love += 2;
+
+        }
+
+        else {
+
+            reply =
+                "You really don't make this easy for me." +
+                "\n\n" +
+                "*Nora smiles.*" +
+                "\n\n" +
+                "But... I think you already know how I feel.";
+
+            action =
+                "*She looks directly at you.*";
+
+            state.love += 1;
+
+        }
+
+        state.trust += 2;
+        state.mood += 5;
+
+    }
+
+
+    /*
+       FRIEND
+    */
+
+    else if (
+        lower.includes("be my friend") ||
+        lower.includes("your friend") ||
+        lower.includes("friends")
+    ) {
+
+        reply =
+            "Friends..." +
+            "\n\n" +
+            "*Nora repeats the word quietly.*" +
+            "\n\n" +
+            "Yeah. I'd like that." +
+            "\n\n" +
+            "I know we literally just met, but " +
+            "I can't remember the last time someone " +
+            "actually wanted to stick around.";
+
+        action =
+            "*Nora opens the door a little wider.*";
+
+        state.friendship += 7;
+        state.trust += 5;
+        state.mood += 6;
+
+    }
+
+
+    /*
+       INSULT
+    */
+
+    else if (
+        lower.includes("stupid") ||
+        lower.includes("ugly") ||
+        lower.includes("annoying") ||
+        lower.includes("hate you")
+    ) {
+
+        reply =
+            "Wow." +
+            "\n\n" +
+            "*Nora's expression changes.*" +
+            "\n\n" +
+            "Okay. I don't know what I did to " +
+            "deserve that, but you could've just " +
+            "told me you were upset.";
+
+        action =
+            "*She takes a small step back from the door.*";
+
+        state.trust -= 5;
+        state.friendship -= 4;
+        state.love -= 2;
+        state.mood -= 7;
+
+    }
+
+
+    /*
+       THANK YOU
+    */
+
+    else if (
+        lower.includes("thank you") ||
+        lower.includes("thanks")
+    ) {
+
+        reply =
+            "You don't have to thank me." +
+            "\n\n" +
+            "Honestly... it's kind of nice just " +
+            "having someone to talk to.";
+
+        action =
+            "*Nora smiles softly.*";
+
+        state.trust += 2;
+        state.friendship += 2;
+        state.mood += 3;
+
+    }
+
+
+    /*
+       GENERAL QUESTION
+    */
+
+    else if (
+        lower.endsWith("?")
+    ) {
+
+        reply =
+            "Hmm..." +
+            "\n\n" +
+            "*Nora thinks about the question instead " +
+            "of answering immediately.*" +
+            "\n\n" +
+            "I don't know if I have a perfect answer. " +
+            "But if you're actually asking because " +
+            "you want to know what I think..." +
+            "\n\n" +
+            "I'd say it's more complicated than it seems.";
+
+        action =
+            "*She leans against the doorframe, thinking.*";
+
+        state.trust += 1;
+
+    }
+
+
+    /*
+       DEFAULT
+    */
+
+    else {
+
+        const responses = [
+
+            {
+                reply:
+                    "That's actually pretty interesting." +
+                    "\n\n" +
+                    "I wasn't expecting you to say that. " +
+                    "Usually when people come over, they " +
+                    "already know what they want to talk " +
+                    "about. You seem different.";
+
+                action:
+                    "*Nora studies your expression curiously.*"
+            },
+
+            {
+                reply:
+                    "I think I understand what you mean." +
+                    "\n\n" +
+                    "Maybe not completely, though. " +
+                    "I tend to overthink things, so I " +
+                    "usually need a minute before I know " +
+                    "what I actually think.";
+
+                action:
+                    "*Nora taps her fingers lightly against the door.*"
+            },
+
+            {
+                reply:
+                    "Huh..." +
+                    "\n\n" +
+                    "That's not really something I expected " +
+                    "you to tell me." +
+                    "\n\n" +
+                    "But I'm glad you did. I think I'd rather " +
+                    "hear something honest than something " +
+                    "someone thinks I'm supposed to hear.";
+
+                action:
+                    "*Nora gives you a thoughtful look.*"
+            },
+
+            {
+                reply:
+                    "I could probably give you a simple " +
+                    "answer, but that feels like cheating." +
+                    "\n\n" +
+                    "Tell me what made you think about it " +
+                    "in the first place.";
+
+                action:
+                    "*Nora tilts her head slightly.*"
+            }
+
+        ];
+
+
+        const chosen =
+            responses[
+                Math.floor(
+                    Math.random() *
+                    responses.length
+                )
+            ];
+
+
+        reply =
+            chosen.reply;
+
+        action =
+            chosen.action;
+
+        state.friendship += 1;
 
     }
 
@@ -1217,9 +1555,9 @@ function fallbackResponse(text) {
 }
 
 
-/* =========================
-   ANALYZE PLAYER
-========================= */
+/* =========================================================
+   ANALYZE MESSAGE
+========================================================= */
 
 function analyzeMessage(text) {
 
@@ -1227,36 +1565,31 @@ function analyzeMessage(text) {
         text.toLowerCase();
 
 
-    /*
-       FRIENDLY BEHAVIOR
-    */
-
     const positive = [
 
         "thanks",
         "thank you",
-        "like",
+        "please",
+        "good",
+        "nice",
+        "kind",
+        "help",
         "care",
         "friend",
-        "help",
         "happy",
-        "good",
-        "nice"
+        "glad"
 
     ];
 
 
-    /*
-       NEGATIVE BEHAVIOR
-    */
-
     const negative = [
 
         "hate",
-        "leave",
-        "ignore",
         "stupid",
-        "annoying"
+        "ugly",
+        "annoying",
+        "shut up",
+        "leave me"
 
     ];
 
@@ -1268,11 +1601,8 @@ function analyzeMessage(text) {
                 lower.includes(word)
             ) {
 
-                state.trust += 1;
-
-                state.friendship += 1;
-
-                state.mood += 1;
+                state.trust += 0.5;
+                state.friendship += 0.5;
 
             }
 
@@ -1287,13 +1617,9 @@ function analyzeMessage(text) {
                 lower.includes(word)
             ) {
 
-                state.trust -= 2;
-
-                state.friendship -= 2;
-
-                state.love -= 1;
-
-                state.mood -= 3;
+                state.trust -= 1;
+                state.friendship -= 1;
+                state.mood -= 1;
 
             }
 
@@ -1302,22 +1628,32 @@ function analyzeMessage(text) {
 
 
     /*
-       IMPORTANT:
+       Love changes much more slowly
+       than friendship.
 
-       Love changes slowly.
-
-       It represents Nora's feelings
-       toward the PLAYER.
+       This prevents the player from
+       instantly filling the Love bar.
     */
+
+    if (
+        lower.includes("pretty") ||
+        lower.includes("beautiful") ||
+        lower.includes("cute")
+    ) {
+
+        state.love += 1;
+
+    }
+
 
     clampStats();
 
 }
 
 
-/* =========================
-   LIMIT VALUES
-========================= */
+/* =========================================================
+   CLAMP VALUES
+========================================================= */
 
 function clampStats() {
 
@@ -1363,9 +1699,9 @@ function clampStats() {
 }
 
 
-/* =========================
+/* =========================================================
    ESCAPE HTML
-========================= */
+========================================================= */
 
 function escapeHTML(text) {
 
@@ -1382,9 +1718,9 @@ function escapeHTML(text) {
 }
 
 
-/* =========================
+/* =========================================================
    ENTER KEY
-========================= */
+========================================================= */
 
 document
     .getElementById("input")
@@ -1404,9 +1740,9 @@ document
     );
 
 
-/* =========================
+/* =========================================================
    START
-========================= */
+========================================================= */
 
 updateStats();
 
