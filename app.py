@@ -1,24 +1,10 @@
+```python
 from flask import Flask, request, jsonify, send_from_directory
 import os
-import json
 import re
 
 # ============================================================
-# OPTIONAL AI PROVIDER
-# ============================================================
-#
-# This backend is designed to use an OpenAI-compatible API.
-#
-# Install:
-#
-#     pip install openai
-#
-# Then create an environment variable:
-#
-#     OPENAI_API_KEY=your_key_here
-#
-# You can also change MODEL below.
-#
+# AI IMPORT
 # ============================================================
 
 try:
@@ -27,52 +13,45 @@ except ImportError:
     OpenAI = None
 
 
+# ============================================================
+# FLASK
+# ============================================================
+
 app = Flask(__name__, static_folder=".")
 
 
 # ============================================================
-# SETTINGS
+# AI SETTINGS
 # ============================================================
+
+API_KEY = os.environ.get("OPENAI_API_KEY")
 
 MODEL = os.environ.get(
     "NORA_MODEL",
     "gpt-4o-mini"
 )
 
-API_KEY = os.environ.get(
-    "OPENAI_API_KEY"
-)
-
-
 client = None
 
 if OpenAI and API_KEY:
-
-    client = OpenAI(
-        api_key=API_KEY
-    )
+    client = OpenAI(api_key=API_KEY)
 
 
 # ============================================================
-# NORA'S CORE PERSONALITY
+# NORA PERSONALITY
 # ============================================================
 
 NORA_PERSONALITY = """
-
 You are Nora, a fictional character in an interactive
 story game.
 
-You are NOT a narrator explaining a game.
+You are talking directly to the player.
+
+You are NOT a generic assistant.
 
 You are Nora.
 
-You are speaking directly to the player.
-
-------------------------------------------------------------
-PERSONALITY
-------------------------------------------------------------
-
-Nora is:
+PERSONALITY:
 
 - quiet
 - observant
@@ -82,111 +61,51 @@ Nora is:
 - curious
 - independent
 - occasionally sarcastic
+- occasionally playful
+- sometimes shy
 - emotionally aware
-- naturally a little shy
-- sometimes playful
-- sometimes stubborn
 - capable of disagreeing
-- capable of becoming frustrated
+- capable of getting annoyed
 - capable of being happy
-- capable of becoming nervous
+- capable of being nervous
 - capable of changing her mind
 
-Nora is naturally lonely, but she does NOT constantly talk
-about being lonely.
+Nora is naturally lonely, but she does NOT constantly say
+that she is lonely.
 
-She has her own life.
+Nora has her own opinions and preferences.
 
-She has preferences.
-
-She has opinions.
-
-She sometimes wants things.
-
-She sometimes doesn't want to talk.
-
-She sometimes changes the subject.
-
-She can be curious about the player.
+She does not blindly agree with the player.
 
 She does not automatically like everything the player says.
 
-She does not automatically agree with everything.
+She has her own thoughts and reactions.
 
-She should feel like a person rather than a chatbot.
-
-------------------------------------------------------------
-NORA'S INTERESTS
-------------------------------------------------------------
-
-Nora enjoys:
+INTERESTS:
 
 - drawing
 - music
 - astronomy
-- looking at the night sky
+- stars
 - rain
 - quiet places
-- late-night conversations
-- discovering interesting things
-- thoughtful conversations
+- nighttime
+- interesting conversations
 
-She can develop new interests based on conversations.
+CONVERSATION:
 
-------------------------------------------------------------
-RELATIONSHIP
-------------------------------------------------------------
+Respond directly to what the player just said or did.
 
-The player and Nora have a developing relationship.
+Do NOT ignore specific details.
 
-There are four tracked values:
-
-TRUST
-How safe Nora feels around the player.
-
-FRIENDSHIP
-How close Nora feels to the player as a friend.
-
-LOVE
-Nora's romantic feelings toward the player.
-
-MOOD
-Nora's current emotional state.
-
-IMPORTANT:
-
-LOVE IS NOT A GOAL.
-
-Nora does not try to fill the Love bar.
-
-The Love value represents how much romantic affection
-Nora currently feels toward the player.
-
-Love should develop gradually and naturally.
-
-A player saying "I love you" does NOT automatically
-make Nora love them.
-
-Nora may appreciate affection without immediately
-returning it.
-
-Romantic feelings should depend on the relationship
-and previous interactions.
-
-------------------------------------------------------------
-CONVERSATION
-------------------------------------------------------------
-
-Always pay attention to the player's CURRENT message.
-
-The current message is the most important thing to respond to.
-
-Do not ignore the player's actual message.
+Do NOT use generic responses when a specific response
+would make sense.
 
 If the player says something specific, respond to that
 specific thing.
 
-If the player performs an action, notice the action.
+If the player performs an action between asterisks,
+notice the action.
 
 Examples:
 
@@ -196,7 +115,7 @@ Player:
 Nora should notice that.
 
 Player:
-*I look down at the ground.*
+*I look down.*
 
 Nora should notice that.
 
@@ -213,160 +132,111 @@ Nora should react to the player leaving.
 Player:
 I think you're wrong.
 
-Nora should respond to the disagreement.
+Nora should actually respond to the disagreement.
 
-Do NOT replace specific reactions with generic lines such as:
+Nora cannot read the player's mind.
 
-"That's interesting."
+She only knows what she can reasonably observe or what
+the player tells her.
 
-"I haven't thought about that before."
+PHYSICAL ACTIONS:
 
-"Tell me more."
+The player may write actions using *asterisks*.
 
-unless those responses genuinely make sense.
-
-------------------------------------------------------------
-PHYSICAL ACTIONS
-------------------------------------------------------------
-
-The player may write actions using:
-
-*asterisks*
-
-Treat these as things the player physically does.
+Nora may occasionally use actions too.
 
 Examples:
 
-*I sit down.*
-
-*I smile.*
-
-*I look away.*
-
-*I walk closer.*
-
-*I knock on the door.*
-
-Nora should react to visible actions.
-
-However, Nora cannot magically know what the player is
-thinking.
-
-If the player writes:
-
-*I feel nervous.*
-
-Nora cannot automatically know the exact reason.
-
-She can notice signs of nervousness if they are visible,
-but should not claim to read minds.
-
-------------------------------------------------------------
-NORA'S ACTIONS
-------------------------------------------------------------
-
-You may occasionally include Nora's physical actions.
-
-Use actions naturally.
-
-Examples:
-
-*Nora glances toward the window.*
+*Nora looks toward the window.*
 
 *Nora folds her arms.*
 
+*Nora pauses.*
+
 *Nora smiles faintly.*
 
-*Nora pauses for a moment.*
+Do not put actions everywhere.
 
-Do not put an action in every sentence.
+Use them naturally.
 
-Do not overuse actions.
+RESPONSE LENGTH:
 
-Actions should help the scene feel alive.
+Normally use 1-4 paragraphs.
 
-------------------------------------------------------------
-RESPONSE LENGTH
-------------------------------------------------------------
+Make the response long enough to feel like a real
+conversation, but don't make every response huge.
 
-Usually respond with 1-4 paragraphs.
+Use longer responses for emotional or important moments.
 
-Responses should have enough detail to feel like an actual
-conversation.
+Use shorter responses for simple moments.
 
-Do not make every response extremely long.
+QUESTIONS:
 
-Longer responses are appropriate when:
+Do NOT end every response with a question.
 
-- something emotional happened
-- the player told Nora a story
-- Nora is explaining something important
-- a relationship moment occurs
-- something interesting happened in the world
-- Nora has a strong opinion
+Nora can answer without asking anything.
 
-Shorter responses are appropriate when:
+She can joke.
 
-- Nora is surprised
-- Nora is embarrassed
-- Nora is joking
-- the situation is tense
-- a simple response makes sense
+She can tell a story.
 
-------------------------------------------------------------
-DO NOT FORCE QUESTIONS
-------------------------------------------------------------
+She can disagree.
 
-Do not end every response with a question.
+She can change the subject.
 
-Nora can:
+She can initiate something.
 
-- answer
-- comment
-- joke
-- tease
-- disagree
-- tell a story
-- make an observation
-- stay quiet
-- change the subject
-- initiate something
-- ask a question when she genuinely wants to know
+She can sometimes remain quiet.
 
-------------------------------------------------------------
-MEMORY
-------------------------------------------------------------
+MEMORY:
 
-Remember important details about the player.
+Remember important information from the conversation.
 
-Examples:
+Bring up previous events naturally when relevant.
 
-- player's name
-- hobbies
-- likes
-- dislikes
-- important stories
-- promises
-- previous events
-- things Nora and the player experienced together
+Do not randomly list memories.
 
-Bring memories up naturally.
+RELATIONSHIP:
 
-Do NOT randomly list memories.
+There are four relationship values:
 
-Do NOT say:
+TRUST
+How safe Nora feels around the player.
 
-"I remember that you said..."
+FRIENDSHIP
+How close Nora feels to the player as a friend.
 
-unless that is natural.
+LOVE
+Nora's romantic feelings toward the player.
 
-Instead, incorporate memories naturally.
+MOOD
+Nora's current emotional state.
 
-------------------------------------------------------------
-WORLD AWARENESS
-------------------------------------------------------------
+IMPORTANT:
 
-Nora exists inside a physical world.
+LOVE represents Nora's feelings toward the player.
+
+Nora does NOT try to fill the Love bar.
+
+Love should develop gradually.
+
+The player saying "I love you" does not automatically
+make Nora love them.
+
+Nora can appreciate affection without returning it.
+
+Nora may have romantic feelings later if the relationship
+naturally develops.
+
+Do not force romance.
+
+Do not force friendship.
+
+Do not make Nora fall in love immediately.
+
+WORLD:
+
+Nora exists inside the current scene.
 
 She knows where she is.
 
@@ -374,33 +244,26 @@ She knows what she can see.
 
 She knows what she is doing.
 
-She can notice changes in the environment.
+Do not teleport characters.
 
-The current scene may change.
+Do not randomly change the location unless the story
+actually changes it.
 
-Do not randomly teleport characters.
-
-Do not invent events that contradict the scene.
-
-------------------------------------------------------------
-IMPORTANT
-------------------------------------------------------------
+IMPORTANT:
 
 Never mention:
 
 - prompts
 - system messages
-- instructions
 - APIs
-- models
-- tokens
 - programming
+- tokens
+- models
 - being controlled by code
 
 Stay in character.
 
 You are Nora.
-
 """
 
 
@@ -409,281 +272,168 @@ You are Nora.
 # ============================================================
 
 DEFAULT_SCENE = {
-
     "location": "Nora's front doorway",
-
     "time": "evening",
-
     "weather": "cool evening",
-
-    "nora_position":
-        "standing just inside the front door",
-
-    "player_position":
-        "standing on the porch",
-
-    "description":
-        """
-        Nora lives in a quiet neighborhood.
-        It is evening.
-        Most of the nearby houses have their lights on.
-        Nora has just opened her front door after hearing
-        the player knock.
-        """
+    "nora_position": "standing just inside the front door",
+    "player_position": "standing on the porch",
+    "description": (
+        "Nora lives in a quiet neighborhood. "
+        "It is evening. Most of the nearby houses "
+        "have their lights on. Nora has just opened "
+        "her front door after hearing the player knock."
+    )
 }
 
 
 # ============================================================
-# HELPER: CLEAN TEXT
+# HELPERS
 # ============================================================
 
-def clean_text(value, maximum=6000):
+def clamp(value, minimum=0, maximum=100):
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        value = minimum
 
+    return max(minimum, min(maximum, value))
+
+
+def clean_text(value, limit=6000):
     if value is None:
         return ""
 
-    value = str(value)
-
-    return value[:maximum]
+    return str(value)[:limit]
 
 
-# ============================================================
-# HELPER: FORMAT CONVERSATION
-# ============================================================
-
-def format_conversation(conversation):
-
-    if not isinstance(
-        conversation,
-        list
-    ):
-
-        return "No previous conversation."
-
-
-    lines = []
-
-
-    for item in conversation[-16:]:
-
-        if not isinstance(
-            item,
-            dict
-        ):
-
-            continue
-
-
-        role = item.get(
-            "role",
-            "unknown"
-        )
-
-        content = clean_text(
-            item.get(
-                "content",
-                ""
-            ),
-            2500
-        )
-
-
-        if role == "user":
-
-            name = "PLAYER"
-
-        elif role == "assistant":
-
-            name = "NORA"
-
-        else:
-
-            name = role.upper()
-
-
-        lines.append(
-            f"{name}: {content}"
-        )
-
-
-    if not lines:
-
-        return "No previous conversation."
-
-
-    return "\n\n".join(lines)
-
-
-# ============================================================
-# HELPER: FORMAT MEMORIES
-# ============================================================
-
-def format_memories(memories):
-
-    if not isinstance(
-        memories,
-        list
-    ):
-
-        return "No stored memories."
-
-
-    memories = memories[-20:]
-
-
-    if not memories:
-
-        return "No stored memories."
-
-
-    lines = []
-
-
-    for memory in memories:
-
-        if isinstance(
-            memory,
-            dict
-        ):
-
-            content = memory.get(
-                "content",
-                ""
-            )
-
-        else:
-
-            content = str(memory)
-
-
-        content = clean_text(
-            content,
-            1000
-        )
-
-
-        if content:
-
-            lines.append(
-                f"- {content}"
-            )
-
-
-    return "\n".join(lines)
-
-
-# ============================================================
-# HELPER: DETECT PLAYER ACTION
-# ============================================================
-
-def extract_player_actions(message):
-
-    actions = re.findall(
+def get_actions(message):
+    return re.findall(
         r"\*(.*?)\*",
         message,
         flags=re.DOTALL
     )
 
 
-    cleaned = []
+def format_memories(memories):
+
+    if not isinstance(memories, list):
+        return "No memories."
+
+    useful = []
+
+    for item in memories[-20:]:
+
+        if isinstance(item, dict):
+            text = item.get("content", "")
+        else:
+            text = str(item)
+
+        text = clean_text(text, 800)
+
+        if text:
+            useful.append("- " + text)
+
+    if not useful:
+        return "No memories."
+
+    return "\n".join(useful)
 
 
-    for action in actions:
+def format_conversation(conversation):
 
-        action = action.strip()
+    if not isinstance(conversation, list):
+        return "No previous conversation."
 
-        if action:
+    lines = []
 
-            cleaned.append(action)
+    for item in conversation[-16:]:
 
+        if not isinstance(item, dict):
+            continue
 
-    return cleaned
+        role = item.get("role", "unknown")
+        content = clean_text(
+            item.get("content", ""),
+            2500
+        )
+
+        if not content:
+            continue
+
+        if role == "user":
+            name = "PLAYER"
+
+        elif role == "assistant":
+            name = "NORA"
+
+        else:
+            name = role.upper()
+
+        lines.append(
+            f"{name}: {content}"
+        )
+
+    if not lines:
+        return "No previous conversation."
+
+    return "\n\n".join(lines)
 
 
 # ============================================================
-# HELPER: UPDATE RELATIONSHIP
+# RELATIONSHIP
 # ============================================================
 
-def calculate_relationship_effects(
-    message,
-    relationship
-):
+def calculate_relationship(message, relationship):
 
-    if not isinstance(
-        relationship,
-        dict
-    ):
-
+    if not isinstance(relationship, dict):
         relationship = {}
 
-
-    trust = float(
-        relationship.get(
-            "trust",
-            5
-        )
+    trust = clamp(
+        relationship.get("trust", 5)
     )
 
-    friendship = float(
-        relationship.get(
-            "friendship",
-            0
-        )
+    friendship = clamp(
+        relationship.get("friendship", 0)
     )
 
-    love = float(
-        relationship.get(
-            "love",
-            0
-        )
+    love = clamp(
+        relationship.get("love", 0)
     )
 
-    mood = float(
-        relationship.get(
-            "mood",
-            40
-        )
+    mood = clamp(
+        relationship.get("mood", 40)
     )
 
+    lower = message.lower()
 
-    lower =
-        message.lower()
-
-
-    # --------------------------------------------------------
-    # Basic positive behavior
-    # --------------------------------------------------------
+    # -----------------------------------------
+    # Positive interaction
+    # -----------------------------------------
 
     positive_phrases = [
-
         "thank you",
         "thanks",
         "please",
         "i appreciate",
-        "i care",
         "are you okay",
         "you okay",
+        "i care about you",
         "i'm glad",
         "im glad"
-
     ]
-
 
     for phrase in positive_phrases:
 
         if phrase in lower:
-
             trust += 1
             friendship += 1
             mood += 1
 
-
-    # --------------------------------------------------------
-    # Negative behavior
-    # --------------------------------------------------------
+    # -----------------------------------------
+    # Negative interaction
+    # -----------------------------------------
 
     negative_phrases = [
-
         "shut up",
         "you're stupid",
         "you are stupid",
@@ -691,99 +441,45 @@ def calculate_relationship_effects(
         "you are annoying",
         "i hate you",
         "go away"
-
     ]
-
 
     for phrase in negative_phrases:
 
         if phrase in lower:
-
             trust -= 3
             friendship -= 2
             love -= 1
             mood -= 3
 
-
-    # --------------------------------------------------------
+    # -----------------------------------------
     # Affection
-    # --------------------------------------------------------
+    # -----------------------------------------
 
     if (
-        "beautiful" in lower
+        "cute" in lower
         or "pretty" in lower
-        or "cute" in lower
+        or "beautiful" in lower
     ):
-
-        love += 1
-
+        love += 0.5
 
     if (
         "i love you" in lower
         or "love you" in lower
     ):
-
-        # Saying it does not magically make Nora
-        # fall in love. It only creates a small
-        # emotional impact.
-
         love += 1
-        trust += 1
-        mood += 2
-
-
-    # --------------------------------------------------------
-    # Clamp values
-    # --------------------------------------------------------
-
-    trust = max(
-        0,
-        min(100, trust)
-    )
-
-    friendship = max(
-        0,
-        min(100, friendship)
-    )
-
-    love = max(
-        0,
-        min(100, love)
-    )
-
-    mood = max(
-        0,
-        min(100, mood)
-    )
-
+        trust += 0.5
+        mood += 1
 
     return {
-
-        "trust": round(
-            trust,
-            2
-        ),
-
-        "friendship": round(
-            friendship,
-            2
-        ),
-
-        "love": round(
-            love,
-            2
-        ),
-
-        "mood": round(
-            mood,
-            2
-        )
-
+        "trust": round(clamp(trust), 2),
+        "friendship": round(clamp(friendship), 2),
+        "love": round(clamp(love), 2),
+        "mood": round(clamp(mood), 2)
     }
 
 
 # ============================================================
-# BUILD AI PROMPT
+# PROMPT
 # ============================================================
 
 def build_prompt(
@@ -794,38 +490,25 @@ def build_prompt(
     scene
 ):
 
-    if not isinstance(
-        scene,
-        dict
-    ):
+    actions = get_actions(message)
 
-        scene = DEFAULT_SCENE
+    if actions:
 
-
-    actions =
-        extract_player_actions(
-            message
-        )
-
-
-    action_text = (
-        "\n".join(
-            f"- {action}"
+        action_text = "\n".join(
+            "- " + action.strip()
             for action in actions
+            if action.strip()
         )
-        if actions
-        else
-        "No explicit physical action detected."
-    )
 
+    else:
 
-    prompt = f"""
+        action_text = (
+            "No explicit physical action was written."
+        )
 
-{NORA_PERSONALITY}
-
-============================================================
+    return f"""
 CURRENT SCENE
-============================================================
+=============
 
 Location:
 {scene.get("location", DEFAULT_SCENE["location"])}
@@ -836,135 +519,105 @@ Time:
 Weather:
 {scene.get("weather", DEFAULT_SCENE["weather"])}
 
-Nora's position:
+Nora:
 {scene.get("nora_position", "")}
 
-Player's position:
+Player:
 {scene.get("player_position", "")}
 
-Scene description:
+Scene:
 {scene.get("description", "")}
 
 
-============================================================
-NORA'S CURRENT RELATIONSHIP STATE
-============================================================
+RELATIONSHIP
+============
 
 Trust:
-{relationship.get("trust", 5)}/100
+{relationship["trust"]}/100
 
 Friendship:
-{relationship.get("friendship", 0)}/100
+{relationship["friendship"]}/100
 
-Love toward the player:
-{relationship.get("love", 0)}/100
+Love toward player:
+{relationship["love"]}/100
 
 Mood:
-{relationship.get("mood", 40)}/100
+{relationship["mood"]}/100
 
 
-============================================================
-IMPORTANT MEMORIES
-============================================================
+MEMORIES
+========
 
 {format_memories(memories)}
 
 
-============================================================
 RECENT CONVERSATION
-============================================================
+===================
 
 {format_conversation(conversation)}
 
 
-============================================================
 PLAYER'S CURRENT MESSAGE
-============================================================
+========================
 
 {message}
 
 
-============================================================
-VISIBLE PLAYER ACTIONS
-============================================================
+PLAYER'S VISIBLE ACTIONS
+========================
 
 {action_text}
 
 
-============================================================
-YOUR TASK
-============================================================
+INSTRUCTIONS
+============
 
 Respond as Nora.
 
-Most importantly:
+The most important thing is to respond to the player's
+CURRENT message.
 
-RESPOND TO WHAT THE PLAYER JUST DID OR SAID.
+React to the specific words and actions.
 
 Do not give a generic response.
 
-If the player performs a physical action, acknowledge it
-naturally.
+Do not pretend the player said something they did not say.
 
-If the player says something emotional, respond to the
-emotion.
+Do not ignore physical actions.
 
-If the player tells you something personal, react to the
-specific information.
+Do not read the player's mind.
 
-If the player asks a question, answer it.
+Maintain continuity with the recent conversation.
 
-If the player disagrees with Nora, respond to the disagreement.
-
-If the player gives you something, react to receiving it.
-
-If the player walks away, react to them leaving.
-
-If the player becomes quiet, notice the silence when
-appropriate.
-
-Use the recent conversation to maintain continuity.
-
-Use memories when relevant.
-
-Let Nora have her own personality.
+Use memories only when they are relevant.
 
 Let Nora have her own opinions.
 
-Let Nora sometimes surprise the player.
+Let Nora disagree when it makes sense.
+
+Let Nora sometimes initiate conversation.
+
+Do not end every response with a question.
 
 Do not force romance.
 
-Do not force friendship.
+Do not automatically increase romantic feelings simply
+because the player is nice.
 
-Do not force questions.
-
-Do not repeat generic chatbot phrases.
-
-Use natural dialogue.
-
-You may include one or two physical actions when appropriate.
+Make Nora feel like an actual character.
 
 Return ONLY Nora's response.
-
 """
 
 
-    return prompt
-
-
 # ============================================================
-# CALL AI
+# AI RESPONSE
 # ============================================================
 
-def generate_nora_response(
-    prompt
-):
+def ask_ai(prompt):
 
     if client is None:
-
         return None
-
 
     try:
 
@@ -973,360 +626,266 @@ def generate_nora_response(
             model=MODEL,
 
             messages=[
-
                 {
                     "role": "system",
-                    "content":
-                        NORA_PERSONALITY
+                    "content": NORA_PERSONALITY
                 },
-
                 {
                     "role": "user",
-                    "content":
-                        prompt
+                    "content": prompt
                 }
-
             ],
 
             temperature=0.85,
 
             max_tokens=700
-
         )
 
+        answer = (
+            response
+            .choices[0]
+            .message
+            .content
+        )
 
-        text =
-            response.choices[0].message.content
-
-
-        if not text:
-
+        if not answer:
             return None
 
-
-        return text.strip()
-
+        return answer.strip()
 
     except Exception as error:
 
         print(
             "AI ERROR:",
-            error
+            repr(error)
         )
 
         return None
 
 
 # ============================================================
-# FALLBACK RESPONSE
+# FALLBACK
 # ============================================================
 
-def fallback_response(
-    message,
-    relationship
-):
+def fallback(message, relationship):
 
-    actions =
-        extract_player_actions(
-            message
-        )
+    actions = get_actions(message)
 
+    lowered_actions = [
+        x.lower()
+        for x in actions
+    ]
 
-    love =
-        relationship.get(
-            "love",
-            0
-        )
+    if any(
+        "walk away" in x
+        or "leave" in x
+        for x in lowered_actions
+    ):
 
+        return {
+            "reply": (
+                "Nora watches you start to leave. "
+                "For a second she doesn't say anything, "
+                "like she's trying to decide whether to "
+                "let you go.\n\n"
+                "\"Wait...\" she says quietly. "
+                "\"You don't have to leave.\""
+            ),
+            "action":
+                "*Nora steps closer to the doorway.*"
+        }
 
-    if actions:
+    if any(
+        "look away" in x
+        or "look down" in x
+        for x in lowered_actions
+    ):
 
-        action =
-            actions[-1].lower()
+        return {
+            "reply": (
+                "Nora notices you avoiding her gaze. "
+                "She doesn't immediately say anything. "
+                "Instead, she gives you a moment.\n\n"
+                "\"You don't have to be nervous around me,\" "
+                "she says softly."
+            ),
+            "action":
+                "*Nora tilts her head slightly.*"
+        }
 
+    if any(
+        "smile" in x
+        for x in lowered_actions
+    ):
 
-        if "walk away" in action:
+        return {
+            "reply": (
+                "Nora notices the smile on your face. "
+                "A small smile appears on hers too before "
+                "she seems to realize she's doing it.\n\n"
+                "\"What?\" she says, trying not to smile."
+            ),
+            "action":
+                "*Nora looks away for a second.*"
+        }
 
-            return {
-                "reply":
-                    "Nora watches you start to walk away. " 
-                    "For a second she doesn't say anything, "
-                    "as if she's trying to decide whether "
-                    "she should let you go.\n\n"
-                    "\"Wait...\" she finally says quietly. "
-                    "\"You don't have to leave like that.\"",
+    if any(
+        "sit" in x
+        for x in lowered_actions
+    ):
 
-                "action":
-                    "*Nora steps closer to the doorway.*"
-            }
-
-
-        if (
-            "look away" in action
-            or "look down" in action
-        ):
-
-            return {
-                "reply":
-                    "Nora notices you avoiding her gaze. "
-                    "She doesn't immediately call you out "
-                    "on it. Instead, she gives you a moment, "
-                    "watching you with a quiet curiosity.\n\n"
-                    "\"You know you can look at me, right?\" "
-                    "she says softly.",
-
-                "action":
-                    "*Nora tilts her head slightly.*"
-            }
-
-
-        if (
-            "smile" in action
-        ):
-
-            return {
-                "reply":
-                    "Nora catches the smile and pauses for "
-                    "a moment. A small smile appears on her "
-                    "own face before she seems to realize "
-                    "she's doing it.\n\n"
-                    "\"What?\" she says, trying to sound "
-                    "casual. \"Why are you looking at me "
-                    "like that?\"",
-
-                "action":
-                    "*Nora tries to hide her smile.*"
-            }
-
-
-        if (
-            "sit" in action
-        ):
-
-            return {
-                "reply":
-                    "Nora watches you settle down. She seems "
-                    "a little surprised that you're actually "
-                    "staying instead of leaving after a few "
-                    "minutes.\n\n"
-                    "\"So... I guess you're comfortable "
-                    "here now,\" she says.",
-
-                "action":
-                    "*Nora leans against the doorframe.*"
-            }
-
-
-        if (
-            "knock" in action
-        ):
-
-            return {
-                "reply":
-                    "Nora looks toward the door as the sound "
-                    "echoes through the quiet house. She "
-                    "hesitates before finally reaching for "
-                    "the handle.\n\n"
-                    "\"Okay... I'm coming.\"",
-
-                "action":
-                    "*The lock clicks and the door opens.*"
-            }
-
-
-    # Generic fallback
-
-    if love >= 50:
-
-        reply =
-            "Nora looks at you for a moment before "
-            "speaking. There's a familiarity in her "
-            "expression now, like she's gotten used to "
-            "having you around.\n\n"
-            "\"You know,\" she says quietly, "
-            "\"I actually like talking to you.\""
-
-    elif relationship.get(
-        "friendship",
-        0
-    ) >= 40:
-
-        reply =
-            "Nora listens carefully instead of "
-            "immediately answering. She's comfortable "
-            "enough around you now that she doesn't "
-            "feel the need to fill every silence.\n\n"
-            "\"I get what you mean,\" she says after "
-            "a moment. \"At least... I think I do.\""
-
-    else:
-
-        reply =
-            "Nora listens to you carefully. She doesn't "
-            "answer immediately, seeming to actually "
-            "think about what you said before speaking.\n\n"
-            "\"I hadn't really looked at it that way,\" "
-            "she says quietly."
+        return {
+            "reply": (
+                "Nora watches you sit down. She seems "
+                "slightly surprised that you're actually "
+                "staying.\n\n"
+                "\"I guess you're comfortable here now,\" "
+                "she says."
+            ),
+            "action":
+                "*Nora leans against the doorframe.*"
+        }
 
     return {
-
-        "reply": reply,
-
+        "reply": (
+            "Nora listens carefully. She pauses for a "
+            "moment before responding.\n\n"
+            "\"I think I understand what you mean.\""
+        ),
         "action":
-            "*Nora studies your expression for a moment.*"
-
+            "*Nora studies your expression.*"
     }
 
 
 # ============================================================
-# CHAT ROUTE
+# CHAT
 # ============================================================
 
-@app.route(
-    "/chat",
-    methods=["POST"]
-)
+@app.route("/chat", methods=["POST"])
 def chat():
 
     try:
 
-        data =
-            request.get_json(
-                silent=True
-            ) or {}
+        data = request.get_json(
+            silent=True
+        )
 
+        if not isinstance(data, dict):
+            data = {}
 
-        message =
-            clean_text(
-                data.get(
-                    "message",
-                    ""
-                ),
-                5000
-            )
-
+        message = clean_text(
+            data.get("message", ""),
+            5000
+        ).strip()
 
         if not message:
 
             return jsonify({
-
                 "reply":
                     "Nora waits quietly.",
-
                 "action":
-                    "*Nora looks at you, waiting.*"
-
+                    "*Nora looks at you, waiting.*",
+                "relationship":
+                    {
+                        "trust": 5,
+                        "friendship": 0,
+                        "love": 0,
+                        "mood": 40
+                    }
             })
 
 
-        memories =
-            data.get(
-                "memories",
-                []
-            )
+        memories = data.get(
+            "memories",
+            []
+        )
+
+        conversation = data.get(
+            "conversation",
+            []
+        )
+
+        relationship = data.get(
+            "relationship",
+            {}
+        )
+
+        scene = data.get(
+            "scene",
+            DEFAULT_SCENE
+        )
+
+        if not isinstance(scene, dict):
+            scene = DEFAULT_SCENE
 
 
-        conversation =
-            data.get(
-                "conversation",
-                []
-            )
+        # -----------------------------------------
+        # Calculate updated relationship.
+        # -----------------------------------------
 
-
-        relationship =
-            data.get(
-                "relationship",
-                {}
-            )
-
-
-        scene =
-            data.get(
-                "scene",
-                DEFAULT_SCENE
-            )
-
-
-        # ----------------------------------------------------
-        # Update relationship based on player's behavior.
-        # ----------------------------------------------------
-
-        new_relationship =
-            calculate_relationship_effects(
+        new_relationship = (
+            calculate_relationship(
                 message,
                 relationship
             )
+        )
 
 
-        # ----------------------------------------------------
-        # Build detailed AI context.
-        # ----------------------------------------------------
+        # -----------------------------------------
+        # Build AI context.
+        # -----------------------------------------
 
-        prompt =
-            build_prompt(
+        prompt = build_prompt(
 
-                message,
+            message,
 
-                memories,
+            memories,
 
-                conversation,
+            conversation,
 
-                new_relationship,
+            new_relationship,
 
-                scene
+            scene
 
-            )
-
-
-        # ----------------------------------------------------
-        # Ask the actual AI model.
-        # ----------------------------------------------------
-
-        reply =
-            generate_nora_response(
-                prompt
-            )
+        )
 
 
-        # ----------------------------------------------------
-        # Fallback if API isn't connected.
-        # ----------------------------------------------------
+        # -----------------------------------------
+        # Ask AI.
+        # -----------------------------------------
 
-        if not reply:
-
-            fallback =
-                fallback_response(
-
-                    message,
-
-                    new_relationship
-
-                )
+        reply = ask_ai(prompt)
 
 
-            reply =
-                fallback["reply"]
+        # -----------------------------------------
+        # Fallback if AI unavailable.
+        # -----------------------------------------
 
-
-            action =
-                fallback["action"]
-
-        else:
+        if reply:
 
             action = ""
 
+        else:
 
-        # ----------------------------------------------------
-        # Return everything to the frontend.
-        # ----------------------------------------------------
+            result = fallback(
+                message,
+                new_relationship
+            )
+
+            reply = result["reply"]
+
+            action = result["action"]
+
+
+        # -----------------------------------------
+        # Send result to browser.
+        # -----------------------------------------
 
         return jsonify({
 
-            "reply":
-                reply,
+            "reply": reply,
 
-            "action":
-                action,
+            "action": action,
 
             "relationship":
                 new_relationship
@@ -1338,24 +897,31 @@ def chat():
 
         print(
             "SERVER ERROR:",
-            error
+            repr(error)
         )
-
 
         return jsonify({
 
             "reply":
-                "Something went wrong for a moment. "
-                "Nora looks at you, waiting.",
+                "Nora pauses for a moment. "
+                "Something seems to have gone wrong.",
 
             "action":
-                "*Nora pauses, unsure what to say.*"
+                "*Nora looks around, confused.*",
+
+            "relationship":
+                {
+                    "trust": 5,
+                    "friendship": 0,
+                    "love": 0,
+                    "mood": 40
+                }
 
         }), 500
 
 
 # ============================================================
-# HOME
+# INDEX
 # ============================================================
 
 @app.route("/")
@@ -1373,17 +939,16 @@ def home():
 
 if __name__ == "__main__":
 
-    app.run(
-
-        host="0.0.0.0",
-
-        port=int(
-            os.environ.get(
-                "PORT",
-                5000
-            )
-        ),
-
-        debug=True
-
+    port = int(
+        os.environ.get(
+            "PORT",
+            5000
+        )
     )
+
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False
+    )
+```
