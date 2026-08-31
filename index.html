@@ -4,11 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Nora — Living World</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -27,7 +25,7 @@ body {
 }
 
 /* =========================
-   LEFT CHARACTER PANEL
+   CHARACTER PANEL
 ========================= */
 
 .character {
@@ -43,7 +41,6 @@ body {
     width: 140px;
     height: 140px;
     margin: 15px auto 20px;
-
     border-radius: 50%;
 
     background:
@@ -97,7 +94,7 @@ body {
 
 .fill {
     height: 100%;
-    transition: width .5s;
+    transition: width .5s ease;
 }
 
 .trust {
@@ -105,12 +102,20 @@ body {
 }
 
 .friendship {
-    background: #d46c9c;
+    background: #5d9bd8;
+}
+
+.love {
+    background: #e879a9;
 }
 
 .mood {
-    background: #6798d5;
+    background: #77b8d8;
 }
+
+/* =========================
+   RESET BUTTON
+========================= */
 
 .reset {
     margin-top: auto;
@@ -142,10 +147,7 @@ body {
 
 .header {
     padding: 18px 25px;
-
-    border-bottom:
-        1px solid #292936;
-
+    border-bottom: 1px solid #292936;
     background: #13131b;
 }
 
@@ -162,30 +164,24 @@ body {
 .messages {
     flex: 1;
     overflow-y: auto;
-
     padding: 35px;
 }
 
 .message {
     max-width: 800px;
     margin-bottom: 25px;
-
-    animation:
-        appear .25s ease;
+    animation: appear .25s ease;
 }
 
 @keyframes appear {
-
     from {
         opacity: 0;
-        transform:
-            translateY(8px);
+        transform: translateY(8px);
     }
 
     to {
         opacity: 1;
-        transform:
-            translateY(0);
+        transform: translateY(0);
     }
 }
 
@@ -212,16 +208,9 @@ body {
     margin: 5px 0;
 }
 
-/* =========================
-   TYPING
-========================= */
-
 .typing {
     display: none;
-
-    padding:
-        0 35px 10px;
-
+    padding: 0 35px 10px;
     color: #777;
     font-style: italic;
 }
@@ -238,8 +227,7 @@ body {
 
     background: #15151f;
 
-    border-top:
-        1px solid #292936;
+    border-top: 1px solid #292936;
 }
 
 input {
@@ -249,8 +237,7 @@ input {
 
     background: #22222d;
 
-    border:
-        1px solid #363642;
+    border: 1px solid #363642;
 
     border-radius: 9px;
 
@@ -266,8 +253,7 @@ input:focus {
 }
 
 button {
-    padding:
-        0 22px;
+    padding: 0 22px;
 
     border: none;
 
@@ -283,16 +269,13 @@ button {
 button:hover {
     background: #8967bd;
 }
-
 </style>
 </head>
 
 
 <body>
 
-
 <div class="game">
-
 
 <!-- =========================
      CHARACTER
@@ -349,6 +332,26 @@ button:hover {
         </div>
 
 
+        <!-- LOVE TOWARD PLAYER -->
+
+        <div class="stat">
+
+            <div class="stat-name">
+                Love
+            </div>
+
+            <div class="bar">
+
+                <div
+                    class="fill love"
+                    id="love">
+                </div>
+
+            </div>
+
+        </div>
+
+
         <div class="stat">
 
             <div class="stat-name">
@@ -368,23 +371,6 @@ button:hover {
 
     </div>
 
-    <div class="stat">
-
-    <div class="stat-name">
-        Love
-    </div>
-
-    <div class="bar">
-
-        <div
-            class="fill love"
-            id="love">
-        </div>
-
-    </div>
-
-</div>
-
 
     <button
         class="reset"
@@ -395,7 +381,6 @@ button:hover {
     </button>
 
 </aside>
-
 
 
 <!-- =========================
@@ -418,13 +403,14 @@ button:hover {
 </header>
 
 
-
 <section
     class="messages"
     id="messages">
 
 
-<!-- OPENING SCENE -->
+<!-- =========================
+     OPENING SCENE
+========================= -->
 
 <div class="message">
 
@@ -433,9 +419,13 @@ button:hover {
     </div>
 
     <div class="action">
-        *You're standing on a quiet neighborhood
-        street. Most of the houses have their
-        lights on.*
+        *You're standing on a quiet
+        neighborhood street.*
+    </div>
+
+    <div class="action">
+        *Most of the houses have
+        their lights on.*
     </div>
 
     <div class="action">
@@ -443,8 +433,11 @@ button:hover {
     </div>
 
     <div class="action">
-        *After a moment of hesitation,
-        you knock on the door.*
+        *You hesitate for a moment.*
+    </div>
+
+    <div class="action">
+        *Then you knock on the door.*
     </div>
 
     <div class="action">
@@ -486,9 +479,7 @@ button:hover {
 
 </div>
 
-
 </section>
-
 
 
 <div
@@ -498,7 +489,6 @@ button:hover {
     Nora is thinking...
 
 </div>
-
 
 
 <div class="input-area">
@@ -521,18 +511,24 @@ button:hover {
 </div>
 
 
-
 <script>
 
 /* =========================
-   GAME STATE
+   DEFAULT GAME STATE
 ========================= */
 
 const DEFAULT_STATE = {
 
+    /*
+       These values describe
+       Nora's feelings toward YOU.
+    */
+
     trust: 5,
 
     friendship: 0,
+
+    love: 0,
 
     mood: 40,
 
@@ -543,16 +539,18 @@ const DEFAULT_STATE = {
 };
 
 
+let savedGame =
+    localStorage.getItem("noraGame");
+
+
 let state =
-    JSON.parse(
-        localStorage.getItem("noraGame")
-    )
-    ||
-    structuredClone(DEFAULT_STATE);
+    savedGame
+    ? JSON.parse(savedGame)
+    : structuredClone(DEFAULT_STATE);
 
 
 /* =========================
-   SAVE
+   SAVE GAME
 ========================= */
 
 function saveGame() {
@@ -566,19 +564,26 @@ function saveGame() {
 
 
 /* =========================
-   RESET
+   RESET EVERYTHING
 ========================= */
 
 function resetGame() {
 
-    const confirmReset =
+    const confirmed =
         confirm(
-            "Reset Nora's story?\n\n" +
-            "This will erase the conversation, " +
-            "memories, trust, friendship, and mood."
+            "Reset Nora's entire story?\n\n" +
+            "This will erase:\n" +
+            "• Conversation\n" +
+            "• Memories\n" +
+            "• Trust\n" +
+            "• Friendship\n" +
+            "• Love\n" +
+            "• Mood\n\n" +
+            "The story will start again."
         );
 
-    if (!confirmReset) {
+
+    if (!confirmed) {
         return;
     }
 
@@ -600,7 +605,7 @@ function resetGame() {
 
 
 /* =========================
-   STATS
+   UPDATE STAT BARS
 ========================= */
 
 function updateStats() {
@@ -615,6 +620,22 @@ function updateStats() {
         "friendship"
     ).style.width =
         state.friendship + "%";
+
+
+    /*
+       IMPORTANT:
+
+       Love is Nora's romantic
+       feelings toward the player.
+
+       Nora does NOT try to fill
+       this bar herself.
+    */
+
+    document.getElementById(
+        "love"
+    ).style.width =
+        state.love + "%";
 
 
     document.getElementById(
@@ -657,7 +678,8 @@ function updateStats() {
 
     document.getElementById(
         "status"
-    ).innerText = status;
+    ).innerText =
+        status;
 
 }
 
@@ -779,13 +801,18 @@ async function sendMessage() {
     });
 
 
-    state.memories.push(
-        text
-    );
+    /*
+       Store what the player said.
+
+       These memories belong to
+       Nora's relationship with YOU.
+    */
+
+    state.memories.push(text);
 
 
     if (
-        state.memories.length > 30
+        state.memories.length > 50
     ) {
 
         state.memories.shift();
@@ -793,9 +820,7 @@ async function sendMessage() {
     }
 
 
-    analyzeMessage(
-        text
-    );
+    analyzeMessage(text);
 
 
     saveGame();
@@ -819,8 +844,10 @@ async function sendMessage() {
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body: JSON.stringify({
@@ -840,6 +867,9 @@ async function sendMessage() {
 
                             friendship:
                                 state.friendship,
+
+                            love:
+                                state.love,
 
                             mood:
                                 state.mood
@@ -887,9 +917,7 @@ async function sendMessage() {
 
         else {
 
-            fallbackResponse(
-                text
-            );
+            fallbackResponse(text);
 
         }
 
@@ -903,9 +931,7 @@ async function sendMessage() {
             "none";
 
 
-        fallbackResponse(
-            text
-        );
+        fallbackResponse(text);
 
     }
 
@@ -913,7 +939,7 @@ async function sendMessage() {
 
 
 /* =========================
-   FALLBACK
+   FALLBACK RESPONSES
 ========================= */
 
 function fallbackResponse(text) {
@@ -930,6 +956,8 @@ function fallbackResponse(text) {
         "*Nora watches you quietly.*";
 
 
+    /* GREETING */
+
     if (
         lower.includes("hi") ||
         lower.includes("hello") ||
@@ -943,13 +971,13 @@ function fallbackResponse(text) {
             "*Nora opens the door a little more.*";
 
         state.trust += 2;
-
         state.friendship += 2;
-
         state.mood += 3;
 
     }
 
+
+    /* KINDNESS */
 
     else if (
         lower.includes("sorry") ||
@@ -967,15 +995,16 @@ function fallbackResponse(text) {
     }
 
 
+    /* LONELINESS */
+
     else if (
         lower.includes("alone") ||
         lower.includes("lonely")
     ) {
 
         reply =
-            "Yeah... I guess I am."
-
-            + " Most days I don't really notice it.";
+            "Yeah... I guess I am. " +
+            "Most days I don't really notice it.";
 
         action =
             "*Nora looks down at the porch.*";
@@ -985,38 +1014,44 @@ function fallbackResponse(text) {
     }
 
 
+    /* DRAWING */
+
     else if (
         lower.includes("drawing") ||
         lower.includes("draw")
     ) {
 
         reply =
-            "You like drawing too? "
-            + "I don't usually show people "
-            + "what I make.";
+            "You like drawing too? " +
+            "I don't usually show people " +
+            "what I make.";
 
         action =
-            "*She glances toward a sketchbook "
-            + "sitting on a nearby table.*";
+            "*She glances toward a sketchbook " +
+            "sitting on a nearby table.*";
 
         state.trust += 2;
 
     }
 
 
+    /* MUSIC */
+
     else if (
         lower.includes("music")
     ) {
 
         reply =
-            "I listen to music when the house "
-            + "gets too quiet.";
+            "I listen to music when the house " +
+            "gets too quiet.";
 
         action =
             "*She looks back into the house.*";
 
     }
 
+
+    /* FRIENDSHIP */
 
     else if (
         lower.includes("friend")
@@ -1032,32 +1067,125 @@ function fallbackResponse(text) {
             "*Nora looks surprised for a moment.*";
 
         state.friendship += 4;
-
         state.trust += 3;
-
         state.mood += 5;
 
     }
 
 
+    /* AFFECTION */
+
+    else if (
+        lower.includes("care about you") ||
+        lower.includes("i care")
+    ) {
+
+        reply =
+            "You... actually care about me?";
+
+        action =
+            "*Nora looks at you for a moment, "
+            + "clearly caught off guard.*";
+
+        state.trust += 3;
+        state.friendship += 2;
+        state.love += 1;
+        state.mood += 4;
+
+    }
+
+
+    /* ROMANTIC COMPLIMENT */
+
+    else if (
+        lower.includes("pretty") ||
+        lower.includes("beautiful") ||
+        lower.includes("cute")
+    ) {
+
+        reply =
+            "Oh..."
+
+            + " You really think that?";
+
+        action =
+            "*Nora looks away, slightly embarrassed.*";
+
+        state.love += 2;
+        state.trust += 1;
+        state.mood += 3;
+
+    }
+
+
+    /* MISS YOU */
+
+    else if (
+        lower.includes("miss you")
+    ) {
+
+        reply =
+            "You... missed me?";
+
+        action =
+            "*A small smile appears on Nora's face.*";
+
+        state.love += 3;
+        state.friendship += 2;
+        state.mood += 5;
+
+    }
+
+
+    /* LOVE CONFESSION */
+
+    else if (
+        lower.includes("i love you") ||
+        lower.includes("love you")
+    ) {
+
+        /*
+           The player saying this does NOT
+           automatically make Nora love them.
+
+           It only gives her a small emotional
+           reaction. Her Love level develops
+           over time.
+        */
+
+        reply =
+            "I... don't know what to say to that.";
+
+        action =
+            "*Nora looks down, visibly flustered.*";
+
+        state.trust += 2;
+        state.mood += 4;
+        state.love += 2;
+
+    }
+
+
+    /* GENERAL */
+
     else {
 
         if (
-            state.friendship > 30
+            state.friendship > 40
         ) {
 
             reply =
-                "That's interesting. "
-                + "I actually want to hear "
-                + "more about that.";
+                "That's interesting. " +
+                "I actually want to hear " +
+                "more about that.";
 
         }
 
         else {
 
             reply =
-                "Hmm... I haven't really "
-                + "thought about that before.";
+                "Hmm... I haven't really " +
+                "thought about that before.";
 
         }
 
@@ -1090,7 +1218,7 @@ function fallbackResponse(text) {
 
 
 /* =========================
-   MESSAGE ANALYSIS
+   ANALYZE PLAYER
 ========================= */
 
 function analyzeMessage(text) {
@@ -1099,12 +1227,15 @@ function analyzeMessage(text) {
         text.toLowerCase();
 
 
+    /*
+       FRIENDLY BEHAVIOR
+    */
+
     const positive = [
 
         "thanks",
         "thank you",
         "like",
-        "love",
         "care",
         "friend",
         "help",
@@ -1114,6 +1245,10 @@ function analyzeMessage(text) {
 
     ];
 
+
+    /*
+       NEGATIVE BEHAVIOR
+    */
 
     const negative = [
 
@@ -1156,6 +1291,8 @@ function analyzeMessage(text) {
 
                 state.friendship -= 2;
 
+                state.love -= 1;
+
                 state.mood -= 3;
 
             }
@@ -1163,6 +1300,15 @@ function analyzeMessage(text) {
         }
     );
 
+
+    /*
+       IMPORTANT:
+
+       Love changes slowly.
+
+       It represents Nora's feelings
+       toward the PLAYER.
+    */
 
     clampStats();
 
@@ -1191,6 +1337,16 @@ function clampStats() {
             Math.min(
                 100,
                 state.friendship
+            )
+        );
+
+
+    state.love =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                state.love
             )
         );
 
