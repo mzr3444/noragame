@@ -1,4 +1,3 @@
-```python
 from flask import Flask, request, jsonify, send_from_directory
 import os
 import re
@@ -951,4 +950,3 @@ if __name__ == "__main__":
         port=port,
         debug=False
     )
-```
